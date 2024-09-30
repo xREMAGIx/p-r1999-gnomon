@@ -1,0 +1,40 @@
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+  display: block;
+  overflow-x: auto;
+}
+
+table td,
+table th {
+  padding: 8px;
+  min-height: 1px;
+  height: 1px;
+}
+
+h1 {
+  @apply text-6xl font-bold text-primary
+}
+
+h2 {
+  @apply text-primary text-3xl font-bold mt-10 mb-4 border-b-2 border-primary pb-2;
+}
+
+h3 {
+  @apply text-primary-content text-2xl font-bold my-4;
+}
+
+.container {
+  @apply max-w-5xl mx-auto px-4;
+}
+
+.paper-texture {
+  @apply min-w-40 p-2 relative text-black flex flex-col max-w-80 flex-1;
+  background-color: #f7ebe7;
+  border: 2px solid #c3b7a0;
+}
+
+.highlight {
+  @apply text-primary font-bold;
+}

@@ -1,0 +1,176 @@
+---
+import { ELEMENT_TYPE } from "@config/constants";
+---
+
+<h1>Character List</h1>
+
+<div x-data={"dataset"}>
+  <div class="filters">
+    <div class="grid grid-cols-filter">
+      <div class="py-2 px-4">Rarity</div>
+      <ul class="py-2 px-4 flex gap-1">
+        <template x-for="rarity in rarities">
+          <li>
+            <button
+              class="btn btn-outline btn-xs"
+              :class="rarity === rarityFilter ? 'btn-active' : ''"
+              @click="filterRarity(rarity)"
+              x-text="rarity"
+            >
+            </button>
+          </li>
+        </template>
+      </ul>
+
+      <div class="py-2 px-4">Element type</div>
+      <ul class="py-2 px-4 flex gap-1">
+        <template x-for="elementType in elementTypes">
+          <li>
+            <button
+              class="btn btn-outline btn-xs"
+              :class="elementType === elementTypeFilter ? 'btn-active' : ''"
+              @click="filterElementType(elementType)"
+              x-text="elementType"
+            >
+            </button>
+          </li>
+        </template>
+      </ul>
+
+      <div class="py-2 px-4">Damage type</div>
+      <ul class="py-2 px-4 flex gap-1">
+        <template x-for="dmgType in dmgTypes">
+          <li>
+            <button
+              class="btn btn-outline btn-xs"
+              :class="dmgType === dmgTypeFilter ? 'btn-active' : ''"
+              @click="filterDmgType(dmgType)"
+              x-text="dmgType"
+            >
+            </button>
+          </li>
+        </template>
+      </ul>
+    </div>
+  </div>
+
+  <ul class="grid grid-cols-6 gap-4">
+    <template x-for="character in characters" :key="character.id">
+      <li>
+        <div
+          class="card card-compact bg-base-100 h-64 border-base-content border shadow-xl"
+        >
+          <div class="card-body relative">
+            <div class="absolute top-0 left-0">
+              <template
+                x-if={`character.elementType === '${ELEMENT_TYPE.MINERAL}'`}
+              >
+                <img
+                  src="/data/et-mineral.png"
+                  alt="Mineral"
+                  class="w-5 aspect-[3/5]"
+                />
+              </template>
+              <template
+                x-if={`character.elementType === '${ELEMENT_TYPE.STAR}'`}
+              >
+                <img
+                  src="/data/et-star.png"
+                  alt="Star"
+                  class="w-5 aspect-[3/5]"
+                />
+              </template>
+              <template
+                x-if={`character.elementType === '${ELEMENT_TYPE.PLANT}'`}
+              >
+                <img
+                  src="/data/et-plant.png"
+                  alt="Plant"
+                  class="w-5 aspect-[3/5]"
+                />
+              </template>
+              <template
+                x-if={`character.elementType === '${ELEMENT_TYPE.BEAST}'`}
+              >
+                <img
+                  src="/data/et-beast.png"
+                  alt="Beast"
+                  class="w-5 aspect-[3/5]"
+                />
+              </template>
+              <template
+                x-if={`character.elementType === '${ELEMENT_TYPE.SPIRIT}'`}
+              >
+                <img
+                  src="/data/et-spirit.png"
+                  alt="Spirit"
+                  class="w-5 aspect-[3/5]"
+                />
+              </template>
+              <template
+                x-if={`character.elementType === '${ELEMENT_TYPE.INTELLECT}'`}
+              >
+                <img
+                  src="/data/et-intellect.png"
+                  alt="Intellect"
+                  class="w-5 aspect-[3/5]"
+                />
+              </template>
+            </div>
+
+            <span
+              class="absolute top-0 right-0 bg-primary-content text-white px-2"
+              x-text="character.version"></span>
+            <h2 class="card-title" x-text="character.title"></h2>
+          </div>
+        </div>
+      </li>
+    </template>
+  </ul>
+</div>
+
+<script>
+  import { DMG_TYPE, ELEMENT_TYPE, RARITY } from "@config/constants";
+  import { CHARACTERS } from "@data/characters";
+  import Alpine from "alpinejs";
+
+  window.Alpine = Alpine;
+
+  Alpine.data("dataset", () => ({
+    rarityFilter: "all",
+    rarities: ["all", ...Object.values(RARITY)],
+    elementTypeFilter: "all",
+    elementTypes: ["all", ...Object.values(ELEMENT_TYPE)],
+    dmgTypeFilter: "all",
+    dmgTypes: ["all", ...Object.values(DMG_TYPE)],
+
+    charaterList: CHARACTERS,
+    characters: CHARACTERS,
+
+    initCharaters(characterEntries) {
+      this.characters = characterEntries;
+    },
+
+    filterRarity(rarity) {
+      this.rarityFilter = rarity;
+      this.characters = this.charaterList.filter(
+        (char) => this.rarityFilter === "all" || char.rare === rarity
+      );
+    },
+
+    filterElementType(elementType) {
+      this.elementTypeFilter = elementType;
+      this.characters = this.charaterList.filter(
+        (char) =>
+          this.elementTypeFilter === "all" || char.elementType === elementType
+      );
+    },
+
+    filterDmgType(dmgType) {
+      this.dmgTypeFilter = dmgType;
+      this.characters = this.charaterList.filter(
+        (char) => this.dmgTypeFilter === "all" || char.dmgType === dmgType
+      );
+    },
+  }));
+</script>

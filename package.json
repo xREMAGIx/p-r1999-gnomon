@@ -1,5 +1,5 @@
 {
-  "name": "p-r1999-gnomon",
+  "name": "p-r1999-atlas",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -10,8 +10,17 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^4.15.9",
+    "@astrojs/alpinejs": "^0.4.0",
     "@astrojs/check": "^0.9.3",
+    "@astrojs/mdx": "^3.1.7",
+    "@astrojs/tailwind": "^5.1.1",
+    "@types/alpinejs": "^3.13.10",
+    "alpinejs": "^3.14.1",
+    "astro": "^4.15.9",
+    "tailwindcss": "^3.4.13",
     "typescript": "^5.6.2"
+  },
+  "devDependencies": {
+    "daisyui": "^3.9.4"
   }
 }
