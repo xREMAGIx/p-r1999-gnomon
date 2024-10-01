@@ -14,16 +14,16 @@ import MarkdownHighlight from "@components/MarkdownHighlight.astro";
 import Material from "@components/Material.astro";
 import {
   EnlightenmentEffect,
+  NumeralPerceptionEffect,
   SturdinessEffect,
   SupplementaryFormulaEffect,
-  NumeralPerceptionEffect,
 } from "@content/effects/functions.mdx";
 
 export const components = { strong: MarkdownHighlight };
 
 # 37
 
-<div class="flex justify-between">
+<div class="flex justify-between flex-col-reverse md:flex-row">
   <div>
     <div class="flex gap-4 items-center">
       <img
@@ -78,7 +78,7 @@ export const components = { strong: MarkdownHighlight };
 
 ### Triangulation
 
-<div class="flex gap-5 items-stretch">
+<div class="flex gap-5 flex-col md:flex-row items-center md:items-stretch">
   <div class="w-48 shrink-0">
     <img
       src={`/data/characters/${frontmatter.id}/skill-1.png`}
@@ -106,7 +106,7 @@ export const components = { strong: MarkdownHighlight };
 
 ### Curve Mapping
 
-<div class="flex gap-5 items-stretch">
+<div class="flex gap-5 flex-col md:flex-row items-center md:items-stretch">
   <div class="w-48 shrink-0">
     <img
       src={`/data/characters/${frontmatter.id}/skill-2.png`}
@@ -137,7 +137,7 @@ export const components = { strong: MarkdownHighlight };
 
 ### Kingdom of Geometry
 
-<div class="flex gap-5 items-stretch">
+<div class="flex gap-5 flex-col md:flex-row items-center md:items-stretch">
   <div class="w-48 shrink-0">
     <img
       src={`/data/characters/${frontmatter.id}/ultimate.png`}
@@ -158,28 +158,22 @@ export const components = { strong: MarkdownHighlight };
 ### Calculation of Genesis
 
 <div class="mt-4 flex items-center">
-  <div class="w-8 h-8 mr-2">
-    <img src="/data/insight/insight-1.png" alt="insight-1-icon" />
-  </div>
-  <span class="text-xl font-bold">Insight 1</span>
+  <div class="w-8 h-8 mr-2">![insight-1-icon](/data/insight/insight-1.png)</div>
+  ##### Insight 1
 </div>
 
 After using an Incantation, gains Eureka +1. After another ally takes an extra action, gains Eureka +1. When at 5 Eureka, consumes 5 Eureka to cast <SupplementaryFormulaEffect />. This attack is regarded as 1 follow-up attack and does not grant Eureka.
 
 <div class="mt-4 flex items-center">
-  <div class="w-8 h-8 mr-2">
-    <img src="/data/insight/insight-2.png" alt="insight-2-icon" />
-  </div>
-  <span class="text-xl font-bold">Insight 2</span>
+  <div class="w-8 h-8 mr-2">![insight-2-icon](/data/insight/insight-2.png)</div>
+  ##### Insight 2
 </div>
 
 Critical DMG <span class="highlight">+15%</span> when the caster enters battle.
 
 <div class="mt-4 flex items-center">
-  <div class="w-8 h-8 mr-2">
-    <img src="/data/insight/insight-3.png" alt="insight-3-icon" />
-  </div>
-  <span class="text-xl font-bold">Insight 3</span>
+  <div class="w-8 h-8 mr-2">![insight-3-icon](/data/insight/insight-3.png)</div>
+  ##### Insight 3
 </div>
 
 When entering battle, Critical Rate <span class="highlight">+20%</span>. All Genesis DMG applied through Incantations can critically hit.
@@ -205,9 +199,35 @@ to **3** stacks; Eureka gained increased to **4**.
 
 ## Insight Materials
 
-| <div class="flex items-center"><img class="w-5 h-5 mr-2" src="/data/insight/insight-1.png" alt="insight-1-icon" /><span class="font-bold">Insight 1</span></div> | <div class="flex items-center"><img class="w-5 h-5 mr-2" src="/data/insight/insight-2.png" alt="insight-2-icon" /><span class="font-bold">Insight 2</span></div> | <div class="flex items-center"><img class="w-5 h-5 mr-2" src="/data/insight/insight-3.png" alt="insight-3-icon" /><span class="font-bold">Insight 3</span></div> |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <Material type="SHARPODONTY" variant="small" require={18000} />                                                                                                  | <Material type="SHARPODONTY" variant="small" require={40000} />                                                                                                  | <Material type="SHARPODONTY" variant="small" require={200000} />                                                                                                 |
-| <Material type="PAGE_OF_STARLIT_ASCENT" variant="small" require={6} />                                                                                           | <Material type="SCROLL_OF_STARLIT_ASCENT" variant="small" require={10} />                                                                                        | <Material type="TOME_OF_STARLIT_ASCENT" variant="small" require={16} />                                                                                          |
-| <Material type="LIQUEFIED_TERROR" variant="small" require={5} />                                                                                                 | <Material type="WINGED_KEY" variant="small" require={6} />                                                                                                       | <Material type="SERPENT_SCEPTER" variant="small" require={3} />                                                                                                  |
-| <Material type="MAGNESIA_CRYSTAL" variant="small" require={6} />                                                                                                 | <Material type="ESOTERIC_BONES" variant="small" require={6} />                                                                                                   | <Material type="BOGEYMAN" variant="small" require={5} />                                                                                                         |
+<div class="flex flex-col md:flex-row gap-4">
+  <div class="flex-1">
+    <div class="flex items-center">
+      <div class="w-6 mr-2">![insight-1-icon](/data/insight/insight-1.png)</div>
+      ##### Insight 1
+    </div>
+    <Material type="SHARPODONTY" variant="small" require={18000} />
+    <Material type="PAGE_OF_STARLIT_ASCENT" variant="small" require={6} />
+    <Material type="LIQUEFIED_TERROR" variant="small" require={5} />
+    <Material type="MAGNESIA_CRYSTAL" variant="small" require={6} />
+  </div>
+  <div class="flex-1">
+    <div class="flex items-center">
+      <div class="w-6 mr-2">![insight-2-icon](/data/insight/insight-2.png)</div>
+      ##### Insight 2
+    </div>
+    <Material type="SHARPODONTY" variant="small" require={40000} />
+    <Material type="SCROLL_OF_STARLIT_ASCENT" variant="small" require={10} />
+    <Material type="WINGED_KEY" variant="small" require={6} />
+    <Material type="ESOTERIC_BONES" variant="small" require={6} />
+  </div>
+  <div class="flex-1">
+    <div class="flex items-center">
+      <div class="w-6 mr-2">![insight-3-icon](/data/insight/insight-3.png)</div>
+      ##### Insight 3
+    </div>
+    <Material type="SHARPODONTY" variant="small" require={200000} />
+    <Material type="TOME_OF_STARLIT_ASCENT" variant="small" require={16} />
+    <Material type="SERPENT_SCEPTER" variant="small" require={3} />
+    <Material type="BOGEYMAN" variant="small" require={5} />
+  </div>
+</div>
