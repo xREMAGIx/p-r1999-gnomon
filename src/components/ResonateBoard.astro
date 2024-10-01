@@ -1,0 +1,64 @@
+<div class="resonate">
+  <canvas id="c" width="400" height="400"></canvas>
+</div>
+
+<script>
+  import SAT from "sat";
+
+  const V = function (x, y) {
+    return new SAT.Vector(x, y);
+  };
+  const P = function (pos, points) {
+    return new SAT.Polygon(pos, points);
+  };
+  const C = function (pos, r) {
+    return new SAT.Circle(pos, r);
+  };
+  const B = function (pos, w, h) {
+    return new SAT.Box(pos, w, h);
+  };
+
+  let poly1 = P(V(160, 120), [
+    V(0, 0),
+    V(60, 0),
+    V(100, 40),
+    V(60, 80),
+    V(0, 80),
+  ]);
+
+  let poly2 = P(V(200, 120), [
+    V(0, 0),
+    V(60, 0),
+    V(100, 40),
+    V(60, 80),
+    V(0, 80),
+  ]);
+
+  // Code for drawing
+  let canvas = document.getElementById("c") as HTMLCanvasElement;
+  let canvasWidth = canvas?.width;
+  let canvasHeight = canvas?.height;
+  let ctx = canvas.getContext("2d");
+
+  function drawPoly(poly, fill) {
+    if (!ctx) return;
+
+    ctx.fillStyle = fill;
+    ctx.beginPath();
+    ctx.moveTo(poly.pos.x, poly.pos.y);
+    poly.calcPoints.forEach(function (p) {
+      ctx?.lineTo(poly.pos.x + p.x, poly.pos.y + p.y);
+    });
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  // Draw the original polygon
+  drawPoly(poly1, "rgba(255,0,0,1)");
+  // Draw it again
+  drawPoly(poly2, "rgba(0,255,0,0.5)");
+
+  let response = new SAT.Response();
+  let collided = SAT.testPolygonPolygon(poly1, poly2, response);
+  console.log("🚀 ~ collided:", collided);
+</script>

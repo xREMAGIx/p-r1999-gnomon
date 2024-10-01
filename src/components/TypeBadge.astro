@@ -1,0 +1,64 @@
+---
+import { AFFLATUS_TYPE } from "@config/constants";
+
+interface Props {
+  type?: string;
+  variant: "text" | "filled" | "outline";
+}
+
+const { type, variant } = Astro.props;
+
+const typeStyle = (() => {
+  switch (type) {
+    case AFFLATUS_TYPE.MINERAL:
+      return {
+        backgroundColor: "bg-mineral",
+        textColor: "text-mineral",
+      };
+    case AFFLATUS_TYPE.STAR:
+      return {
+        backgroundColor: "bg-star",
+        textColor: "text-star",
+      };
+    case AFFLATUS_TYPE.PLANT:
+      return {
+        backgroundColor: "bg-plant",
+        textColor: "text-plant",
+      };
+    case AFFLATUS_TYPE.BEAST:
+      return {
+        backgroundColor: "bg-beast",
+        textColor: "text-beast",
+      };
+    case AFFLATUS_TYPE.SPIRIT:
+      return {
+        backgroundColor: "bg-spirit",
+        textColor: "text-spirit",
+      };
+    case AFFLATUS_TYPE.INTELLECT:
+      return {
+        backgroundColor: "bg-intellect",
+        textColor: "text-intellect",
+      };
+
+    default:
+      return {
+        backgroundColor: "bg-base",
+        textColor: "text-base",
+      };
+  }
+})();
+---
+
+<div
+  class:list={[
+    { [`badge`]: variant !== "text" },
+    {
+      [`badge-filled ${typeStyle.backgroundColor}`]: variant === "filled",
+      [`badge-outline ${typeStyle.textColor}`]: variant === "outline",
+      [`${typeStyle.textColor}`]: variant === "text",
+    },
+  ]}
+>
+  {type}
+</div>

@@ -1,0 +1,236 @@
+---
+title: "37"
+slug: "thirty-seven"
+id: "37"
+afflatus: "star"
+dmg: "mental"
+---
+
+import CardInfo from "@components/CardInfo.astro";
+import CardStar from "@components/CardStar.astro";
+import CardType from "@components/CardType.astro";
+import EffectTooltip from "@components/EffectTooltip.astro";
+import MarkdownHighlight from "@components/MarkdownHighlight.astro";
+import Material from "@components/Material.astro";
+import {
+  EnlightenmentEffect,
+  NumeralPerceptionEffect,
+  SturdinessEffect,
+  SupplementaryFormulaEffect,
+} from "@content/effects/functions.mdx";
+import ResonateBoard from "@components/ResonateBoard.astro";
+
+export const components = { strong: MarkdownHighlight };
+
+# 37
+
+<div class="flex justify-between flex-col-reverse md:flex-row">
+  <div>
+    <div class="flex gap-4 items-center">
+      <img
+        class="w-20"
+        src={`/data/afflatus/af-${frontmatter.afflatus}.png`}
+        alt={`afflatus ${frontmatter.afflatus}`}
+      />
+      <img
+        class="w-20 h-20"
+        src={`/data/dmg-type/${frontmatter.dmg}.png`}
+        alt={`damage type ${frontmatter.dmg}`}
+      />
+    </div>
+    <div class="flex gap-4 justify-end">
+      <img
+        class="w-20 h-20"
+        src={`/data/characters/${frontmatter.id}/signature.png`}
+        alt="signature"
+      />
+    </div>
+  </div>
+  <div>
+    <div class="w-80 h-40 overflow-hidden">
+      <img
+        class="w-full"
+        src={`/data/characters/${frontmatter.id}/portrait.webp`}
+        alt="portrait"
+      />
+    </div>
+    <div class="mt-5 flex gap-5 justify-center items-end">
+      <div>
+        <img
+          class="w-20"
+          src={`/data/characters/${frontmatter.id}/udimo.png`}
+          alt="udimo"
+        />
+        Udimo
+      </div>
+      <div>
+        <img
+          class="w-20"
+          src={`/data/characters/${frontmatter.id}/chibi.png`}
+          alt="chibi"
+        />
+        Chibi
+      </div>
+    </div>
+  </div>
+</div>
+
+## Skills
+
+### Triangulation
+
+<div class="flex gap-5 flex-col md:flex-row items-center md:items-stretch">
+  <div class="w-48 shrink-0">
+    <img
+      src={`/data/characters/${frontmatter.id}/skill-1.png`}
+      alt="Triangulation"
+    />
+  </div>
+  <CardInfo star={1} type="ATTACK" note="An obvious triangle.">
+    1-target attack. Deals **140%** Mental DMG plus (ATK x**40%**) Genesis DMG.
+  </CardInfo>
+  <CardInfo
+    star={2}
+    type="ATTACK"
+    note="An obvious triangle, speaking out against overlooked injustices."
+  >
+    1-target attack. Deals **210%** Mental DMG plus (ATK x**60%**) Genesis DMG.
+  </CardInfo>
+  <CardInfo
+    star={3}
+    type="ATTACK"
+    note="An obvious triangle, speaking out against overlooked injustices, the evidence is as follows."
+  >
+    1-target attack. Deals **350%** Mental DMG plus (ATK x**100%**) Genesis DMG.
+  </CardInfo>
+</div>
+
+### Curve Mapping
+
+<div class="flex gap-5 flex-col md:flex-row items-center md:items-stretch">
+  <div class="w-48 shrink-0">
+    <img
+      src={`/data/characters/${frontmatter.id}/skill-2.png`}
+      alt="Curve Mapping"
+    />
+  </div>
+  <CardInfo star={1} type="ATTACK" note="Such beautiful form.">
+    Mass Attack. Deals **70%** Mental DMG plus (ATK x**40**%) Genesis DMG to 2
+    enemies. Gains 1 additional stack of <SturdinessEffect />.
+  </CardInfo>
+  <CardInfo
+    star={2}
+    type="ATTACK"
+    note="Such beautiful form. Desirable in dimensions and fractals."
+  >
+    Mass Attack. Deals **105%** Mental DMG plus (ATK x**60**%) Genesis DMG to 2
+    enemies. Gains 1 additional stack of <SturdinessEffect />.
+  </CardInfo>
+  <CardInfo
+    star={3}
+    type="ATTACK"
+    note="Such beautiful form. Desirable in dimensions and fractals — a truth agreed upon by all."
+  >
+    Mass Attack. Deals **175%** Mental DMG plus (ATK x**100**%) Genesis DMG to 2
+    enemies. Gains 1 additional stack of <SturdinessEffect />.
+  </CardInfo>
+</div>
+
+### Kingdom of Geometry
+
+<div class="flex gap-5 flex-col md:flex-row items-center md:items-stretch">
+  <div class="w-48 shrink-0">
+    <img
+      src={`/data/characters/${frontmatter.id}/ultimate.png`}
+      alt="Kingdom of Geometry"
+    />
+  </div>
+  <CardInfo
+    type="BUFF"
+    note="It is the omega, the final answer, the result of all calculations."
+  >
+    Mass Buff. Grants 2 stacks of <NumeralPerceptionEffect /> to all allies,
+    gains 2 stacks of <EnlightenmentEffect />, and gains Eureka +2.
+  </CardInfo>
+</div>
+
+## Inheritance
+
+### Calculation of Genesis
+
+<div class="mt-4 flex items-center">
+  <div class="w-8 h-8 mr-2">![insight-1-icon](/data/insight/insight-1.png)</div>
+  ##### Insight 1
+</div>
+
+After using an Incantation, gains Eureka +1. After another ally takes an extra action, gains Eureka +1. When at 5 Eureka, consumes 5 Eureka to cast <SupplementaryFormulaEffect />. This attack is regarded as 1 follow-up attack and does not grant Eureka.
+
+<div class="mt-4 flex items-center">
+  <div class="w-8 h-8 mr-2">![insight-2-icon](/data/insight/insight-2.png)</div>
+  ##### Insight 2
+</div>
+
+Critical DMG <span class="highlight">+15%</span> when the caster enters battle.
+
+<div class="mt-4 flex items-center">
+  <div class="w-8 h-8 mr-2">![insight-3-icon](/data/insight/insight-3.png)</div>
+  ##### Insight 3
+</div>
+
+When entering battle, Critical Rate <span class="highlight">+20%</span>. All Genesis DMG applied through Incantations can critically hit.
+
+## Portray
+
+<span class="text-2xl mr-2">Lv. 1:</span> Calculation of Genesis: When entering
+battle, Critical Rate boost increased to **40%**.
+
+<span class="text-2xl mr-2">Lv. 2:</span> Calculation of Genesis: <NumeralPerceptionEffect />
+'s Mental DMG is increased to **180%**; additional Genesis DMG increased to
+(ATKx**60%**).
+
+<span class="text-2xl">Lv. 3:</span> Kingdom of Geometry: <EnlightenmentEffect /> increased
+to **3** stacks; Eureka gained increased to **3**.
+
+<span class="text-2xl">Lv. 4:</span> Calculation of Genesis: <SupplementaryFormulaEffect />
+'s Mental DMG is increased to **240%**; additional Genesis DMG increased to
+(ATKx**80%**).
+
+<span class="text-2xl">Lv. 5:</span> Kingdom of Geometry: <NumeralPerceptionEffect /> increased
+to **3** stacks; Eureka gained increased to **4**.
+
+## Insight Materials
+
+<div class="flex flex-col md:flex-row gap-4">
+  <div class="flex-1">
+    <div class="flex items-center">
+      <div class="w-6 mr-2">![insight-1-icon](/data/insight/insight-1.png)</div>
+      ##### Insight 1
+    </div>
+    <Material type="SHARPODONTY" variant="small" require={18000} />
+    <Material type="PAGE_OF_STARLIT_ASCENT" variant="small" require={6} />
+    <Material type="LIQUEFIED_TERROR" variant="small" require={5} />
+    <Material type="MAGNESIA_CRYSTAL" variant="small" require={6} />
+  </div>
+  <div class="flex-1">
+    <div class="flex items-center">
+      <div class="w-6 mr-2">![insight-2-icon](/data/insight/insight-2.png)</div>
+      ##### Insight 2
+    </div>
+    <Material type="SHARPODONTY" variant="small" require={40000} />
+    <Material type="SCROLL_OF_STARLIT_ASCENT" variant="small" require={10} />
+    <Material type="WINGED_KEY" variant="small" require={6} />
+    <Material type="ESOTERIC_BONES" variant="small" require={6} />
+  </div>
+  <div class="flex-1">
+    <div class="flex items-center">
+      <div class="w-6 mr-2">![insight-3-icon](/data/insight/insight-3.png)</div>
+      ##### Insight 3
+    </div>
+    <Material type="SHARPODONTY" variant="small" require={200000} />
+    <Material type="TOME_OF_STARLIT_ASCENT" variant="small" require={16} />
+    <Material type="SERPENT_SCEPTER" variant="small" require={3} />
+    <Material type="BOGEYMAN" variant="small" require={5} />
+  </div>
+</div>
+
+<ResonateBoard />
