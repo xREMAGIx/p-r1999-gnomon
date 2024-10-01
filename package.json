@@ -17,6 +17,7 @@
     "@types/alpinejs": "^3.13.10",
     "alpinejs": "^3.14.1",
     "astro": "^4.15.9",
+    "sat": "^0.9.0",
     "tailwindcss": "^3.4.13",
     "typescript": "^5.6.2"
   },
