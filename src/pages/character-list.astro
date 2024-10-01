@@ -1,5 +1,5 @@
 ---
-import { ELEMENT_TYPE } from "@config/constants";
+import { AFFLATUS_TYPE } from "@config/constants";
 ---
 
 <h1>Character List</h1>
@@ -24,13 +24,13 @@ import { ELEMENT_TYPE } from "@config/constants";
 
       <div class="py-2 px-4">Element type</div>
       <ul class="py-2 px-4 flex gap-1">
-        <template x-for="elementType in elementTypes">
+        <template x-for="afflatusType in afflatusTypes">
           <li>
             <button
               class="btn btn-outline btn-xs"
-              :class="elementType === elementTypeFilter ? 'btn-active' : ''"
-              @click="filterElementType(elementType)"
-              x-text="elementType"
+              :class="afflatusType === afflatusTypeFilter ? 'btn-active' : ''"
+              @click="filterElementType(afflatusType)"
+              x-text="afflatusType"
             >
             </button>
           </li>
@@ -63,55 +63,55 @@ import { ELEMENT_TYPE } from "@config/constants";
           <div class="card-body relative">
             <div class="absolute top-0 left-0">
               <template
-                x-if={`character.elementType === '${ELEMENT_TYPE.MINERAL}'`}
+                x-if={`character.afflatusType === '${AFFLATUS_TYPE.MINERAL}'`}
               >
                 <img
-                  src="/data/et-mineral.png"
+                  src="/data/afflatus/at-mineral.png"
                   alt="Mineral"
                   class="w-5 aspect-[3/5]"
                 />
               </template>
               <template
-                x-if={`character.elementType === '${ELEMENT_TYPE.STAR}'`}
+                x-if={`character.afflatusType === '${AFFLATUS_TYPE.STAR}'`}
               >
                 <img
-                  src="/data/et-star.png"
+                  src="/data/afflatus/at-star.png"
                   alt="Star"
                   class="w-5 aspect-[3/5]"
                 />
               </template>
               <template
-                x-if={`character.elementType === '${ELEMENT_TYPE.PLANT}'`}
+                x-if={`character.afflatusType === '${AFFLATUS_TYPE.PLANT}'`}
               >
                 <img
-                  src="/data/et-plant.png"
+                  src="/data/afflatus/at-plant.png"
                   alt="Plant"
                   class="w-5 aspect-[3/5]"
                 />
               </template>
               <template
-                x-if={`character.elementType === '${ELEMENT_TYPE.BEAST}'`}
+                x-if={`character.afflatusType === '${AFFLATUS_TYPE.BEAST}'`}
               >
                 <img
-                  src="/data/et-beast.png"
+                  src="/data/afflatus/at-beast.png"
                   alt="Beast"
                   class="w-5 aspect-[3/5]"
                 />
               </template>
               <template
-                x-if={`character.elementType === '${ELEMENT_TYPE.SPIRIT}'`}
+                x-if={`character.afflatusType === '${AFFLATUS_TYPE.SPIRIT}'`}
               >
                 <img
-                  src="/data/et-spirit.png"
+                  src="/data/afflatus/at-spirit.png"
                   alt="Spirit"
                   class="w-5 aspect-[3/5]"
                 />
               </template>
               <template
-                x-if={`character.elementType === '${ELEMENT_TYPE.INTELLECT}'`}
+                x-if={`character.afflatusType === '${AFFLATUS_TYPE.INTELLECT}'`}
               >
                 <img
-                  src="/data/et-intellect.png"
+                  src="/data/afflatus/at-intellect.png"
                   alt="Intellect"
                   class="w-5 aspect-[3/5]"
                 />
@@ -130,7 +130,7 @@ import { ELEMENT_TYPE } from "@config/constants";
 </div>
 
 <script>
-  import { DMG_TYPE, ELEMENT_TYPE, RARITY } from "@config/constants";
+  import { DMG_TYPE, AFFLATUS_TYPE, RARITY } from "@config/constants";
   import { CHARACTERS } from "@data/characters";
   import Alpine from "alpinejs";
 
@@ -139,8 +139,8 @@ import { ELEMENT_TYPE } from "@config/constants";
   Alpine.data("dataset", () => ({
     rarityFilter: "all",
     rarities: ["all", ...Object.values(RARITY)],
-    elementTypeFilter: "all",
-    elementTypes: ["all", ...Object.values(ELEMENT_TYPE)],
+    afflatusTypeFilter: "all",
+    afflatusTypes: ["all", ...Object.values(AFFLATUS_TYPE)],
     dmgTypeFilter: "all",
     dmgTypes: ["all", ...Object.values(DMG_TYPE)],
 
@@ -158,11 +158,12 @@ import { ELEMENT_TYPE } from "@config/constants";
       );
     },
 
-    filterElementType(elementType) {
-      this.elementTypeFilter = elementType;
+    filterElementType(afflatusType) {
+      this.afflatusTypeFilter = afflatusType;
       this.characters = this.charaterList.filter(
         (char) =>
-          this.elementTypeFilter === "all" || char.elementType === elementType
+          this.afflatusTypeFilter === "all" ||
+          char.afflatusType === afflatusType
       );
     },
 

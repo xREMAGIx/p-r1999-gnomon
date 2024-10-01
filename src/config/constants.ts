@@ -1,4 +1,4 @@
-export const ELEMENT_TYPE = {
+export const AFFLATUS_TYPE = {
   MINERAL: "mineral",
   STAR: "star",
   PLANT: "plant",

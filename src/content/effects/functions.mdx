@@ -1,0 +1,41 @@
+import EffectTooltip from "@components/EffectTooltip.astro";
+import MarkdownHighlight from "@components/MarkdownHighlight.astro";
+
+export const components = { strong: MarkdownHighlight };
+
+export function EnlightenmentEffect() {
+  return (
+    <EffectTooltip effect="[Enlightenment]">
+      The Incantation's additional Genesis DMG Dealt{" "}
+      <MarkdownHighlight>+100%</MarkdownHighlight> (-1 stack after trigger).
+    </EffectTooltip>
+  );
+}
+
+export function SturdinessEffect() {
+  return (
+    <EffectTooltip effect="[Sturdiness]">
+      When the caster is attacked, DMG Taken Reduction{" "}
+      <MarkdownHighlight>+25%</MarkdownHighlight> (-1 stack after trigger).
+    </EffectTooltip>
+  );
+}
+
+export function SupplementaryFormulaEffect() {
+  return (
+    <EffectTooltip effect="[Supplementary Formula]">
+      Mass attack. Deals <MarkdownHighlight>120%</MarkdownHighlight> Mental DMG
+      plus (ATK x<MarkdownHighlight>40%</MarkdownHighlight>) Genesis DMG to all
+      enemies.
+    </EffectTooltip>
+  );
+}
+
+export function NumeralPerceptionEffect() {
+  return (
+    <EffectTooltip effect="[Numeral Perception]">
+      ATK <MarkdownHighlight>+10%</MarkdownHighlight> (-1 stack after
+      attacking).
+    </EffectTooltip>
+  );
+}

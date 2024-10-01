@@ -1,5 +1,5 @@
 ---
-import { ELEMENT_TYPE } from "@config/constants";
+import { AFFLATUS_TYPE } from "@config/constants";
 
 interface Props {
   type?: string;
@@ -10,32 +10,32 @@ const { type, variant } = Astro.props;
 
 const typeStyle = (() => {
   switch (type) {
-    case ELEMENT_TYPE.MINERAL:
+    case AFFLATUS_TYPE.MINERAL:
       return {
         backgroundColor: "bg-mineral",
         textColor: "text-mineral",
       };
-    case ELEMENT_TYPE.STAR:
+    case AFFLATUS_TYPE.STAR:
       return {
         backgroundColor: "bg-star",
         textColor: "text-star",
       };
-    case ELEMENT_TYPE.PLANT:
+    case AFFLATUS_TYPE.PLANT:
       return {
         backgroundColor: "bg-plant",
         textColor: "text-plant",
       };
-    case ELEMENT_TYPE.BEAST:
+    case AFFLATUS_TYPE.BEAST:
       return {
         backgroundColor: "bg-beast",
         textColor: "text-beast",
       };
-    case ELEMENT_TYPE.SPIRIT:
+    case AFFLATUS_TYPE.SPIRIT:
       return {
         backgroundColor: "bg-spirit",
         textColor: "text-spirit",
       };
-    case ELEMENT_TYPE.INTELLECT:
+    case AFFLATUS_TYPE.INTELLECT:
       return {
         backgroundColor: "bg-intellect",
         textColor: "text-intellect",

@@ -14,6 +14,6 @@ const { entry } = Astro.props;
 const { Content } = await entry.render();
 ---
 
-<MarkdownLayout title={"Character"}>
+<MarkdownLayout title={`${entry.data.title} | Character`}>
   <Content />
 </MarkdownLayout>

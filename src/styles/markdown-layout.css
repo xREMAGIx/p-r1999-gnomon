@@ -2,7 +2,6 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin: 0 auto;
-  display: block;
   overflow-x: auto;
 }
 
@@ -14,7 +13,7 @@ table th {
 }
 
 h1 {
-  @apply text-6xl font-bold text-primary
+  @apply text-6xl font-bold text-primary;
 }
 
 h2 {

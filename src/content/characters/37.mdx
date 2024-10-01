@@ -1,5 +1,9 @@
 ---
 title: "37"
+slug: "thirty-seven"
+id: "37"
+afflatus: "star"
+dmg: "mental"
 ---
 
 import CardInfo from "@components/CardInfo.astro";
@@ -7,45 +11,68 @@ import CardStar from "@components/CardStar.astro";
 import CardType from "@components/CardType.astro";
 import EffectTooltip from "@components/EffectTooltip.astro";
 import MarkdownHighlight from "@components/MarkdownHighlight.astro";
+import Material from "@components/Material.astro";
+import {
+  EnlightenmentEffect,
+  SturdinessEffect,
+  SupplementaryFormulaEffect,
+  NumeralPerceptionEffect,
+} from "@content/effects/functions.mdx";
 
 export const components = { strong: MarkdownHighlight };
 
-export function NumeralPerceptionEffect() {
-  return (
-    <EffectTooltip effect="[Numeral Perception]">
-      ATK <span class="highlight">+10%</span> (-1 stack after attacking).
-    </EffectTooltip>
-  );
-}
-
-export function EnlightenmentEffect() {
-  return (
-    <EffectTooltip effect="[Enlightenment]">
-      The Incantation's additional Genesis DMG Dealt{" "}
-      <span class="highlight">+100%</span> (-1 stack after trigger).
-    </EffectTooltip>
-  );
-}
-
-export function SturdinessEffect() {
-  return (
-    <EffectTooltip effect="[Sturdiness]">
-      When the caster is attacked, DMG Taken Reduction{" "}
-      <span class="highlight">+25%</span> (-1 stack after trigger).
-    </EffectTooltip>
-  );
-}
-
-export function SupplementaryFormulaEffect() {
-  return (
-    <EffectTooltip effect="[Supplementary Formula]">
-      Mass attack. Deals <span class="highlight">120%</span> Mental DMG plus
-      (ATK x<span class="highlight">40%</span>) Genesis DMG to all enemies.
-    </EffectTooltip>
-  );
-}
-
 # 37
+
+<div class="flex justify-between">
+  <div>
+    <div class="flex gap-4 items-center">
+      <img
+        class="w-20"
+        src={`/data/afflatus/af-${frontmatter.afflatus}.png`}
+        alt={`afflatus ${frontmatter.afflatus}`}
+      />
+      <img
+        class="w-20 h-20"
+        src={`/data/dmg-type/${frontmatter.dmg}.png`}
+        alt={`damage type ${frontmatter.dmg}`}
+      />
+    </div>
+    <div class="flex gap-4 justify-end">
+      <img
+        class="w-20 h-20"
+        src={`/data/characters/${frontmatter.id}/signature.png`}
+        alt="signature"
+      />
+    </div>
+  </div>
+  <div>
+    <div class="w-80 h-40 overflow-hidden">
+      <img
+        class="w-full"
+        src={`/data/characters/${frontmatter.id}/portrait.webp`}
+        alt="portrait"
+      />
+    </div>
+    <div class="mt-5 flex gap-5 justify-center items-end">
+      <div>
+        <img
+          class="w-20"
+          src={`/data/characters/${frontmatter.id}/udimo.png`}
+          alt="udimo"
+        />
+        Udimo
+      </div>
+      <div>
+        <img
+          class="w-20"
+          src={`/data/characters/${frontmatter.id}/chibi.png`}
+          alt="chibi"
+        />
+        Chibi
+      </div>
+    </div>
+  </div>
+</div>
 
 ## Skills
 
@@ -53,15 +80,26 @@ export function SupplementaryFormulaEffect() {
 
 <div class="flex gap-5 items-stretch">
   <div class="w-48 shrink-0">
-    <img src="/data/characters/37/skill-1.png" alt="Triangulation" />
+    <img
+      src={`/data/characters/${frontmatter.id}/skill-1.png`}
+      alt="Triangulation"
+    />
   </div>
   <CardInfo star={1} type="ATTACK" note="An obvious triangle.">
     1-target attack. Deals **140%** Mental DMG plus (ATK x**40%**) Genesis DMG.
   </CardInfo>
-  <CardInfo star={2} type="ATTACK" note="An obvious triangle, speaking out against overlooked injustices.">
+  <CardInfo
+    star={2}
+    type="ATTACK"
+    note="An obvious triangle, speaking out against overlooked injustices."
+  >
     1-target attack. Deals **210%** Mental DMG plus (ATK x**60%**) Genesis DMG.
   </CardInfo>
-  <CardInfo star={3} type="ATTACK" note="An obvious triangle, speaking out against overlooked injustices, the evidence is as follows.">
+  <CardInfo
+    star={3}
+    type="ATTACK"
+    note="An obvious triangle, speaking out against overlooked injustices, the evidence is as follows."
+  >
     1-target attack. Deals **350%** Mental DMG plus (ATK x**100%**) Genesis DMG.
   </CardInfo>
 </div>
@@ -70,22 +108,30 @@ export function SupplementaryFormulaEffect() {
 
 <div class="flex gap-5 items-stretch">
   <div class="w-48 shrink-0">
-    <img src="/data/characters/37/skill-2.png" alt="Curve Mapping" />
+    <img
+      src={`/data/characters/${frontmatter.id}/skill-2.png`}
+      alt="Curve Mapping"
+    />
   </div>
   <CardInfo star={1} type="ATTACK" note="Such beautiful form.">
-    Mass Attack. Deals **70%** Mental
-    DMG plus (ATK x**40**%) Genesis DMG to 2 enemies. Gains 1 additional stack
-    of <SturdinessEffect />.
+    Mass Attack. Deals **70%** Mental DMG plus (ATK x**40**%) Genesis DMG to 2
+    enemies. Gains 1 additional stack of <SturdinessEffect />.
   </CardInfo>
-  <CardInfo star={2} type="ATTACK" note="Such beautiful form. Desirable in dimensions and fractals.">
-    Mass Attack. Deals **105%** Mental
-    DMG plus (ATK x**60**%) Genesis DMG to 2 enemies. Gains 1 additional stack
-    of <SturdinessEffect />.
+  <CardInfo
+    star={2}
+    type="ATTACK"
+    note="Such beautiful form. Desirable in dimensions and fractals."
+  >
+    Mass Attack. Deals **105%** Mental DMG plus (ATK x**60**%) Genesis DMG to 2
+    enemies. Gains 1 additional stack of <SturdinessEffect />.
   </CardInfo>
-  <CardInfo star={3} type="ATTACK" note="Such beautiful form. Desirable in dimensions and fractals — a truth agreed upon by all.">
-    Mass Attack. Deals **175%** Mental
-    DMG plus (ATK x**100**%) Genesis DMG to 2 enemies. Gains 1 additional stack
-    of <SturdinessEffect />.
+  <CardInfo
+    star={3}
+    type="ATTACK"
+    note="Such beautiful form. Desirable in dimensions and fractals — a truth agreed upon by all."
+  >
+    Mass Attack. Deals **175%** Mental DMG plus (ATK x**100**%) Genesis DMG to 2
+    enemies. Gains 1 additional stack of <SturdinessEffect />.
   </CardInfo>
 </div>
 
@@ -93,12 +139,17 @@ export function SupplementaryFormulaEffect() {
 
 <div class="flex gap-5 items-stretch">
   <div class="w-48 shrink-0">
-    <img src="/data/characters/37/ultimate.png" alt="Kingdom of Geometry" />
+    <img
+      src={`/data/characters/${frontmatter.id}/ultimate.png`}
+      alt="Kingdom of Geometry"
+    />
   </div>
-  <CardInfo type="BUFF" note="It is the omega, the final answer, the result of all calculations.">
-    Mass Buff. Grants 2 stacks of{" "}
-    <NumeralPerceptionEffect /> to all allies, gains 2 stacks of{" "}
-    <EnlightenmentEffect />, and gains Eureka +2.
+  <CardInfo
+    type="BUFF"
+    note="It is the omega, the final answer, the result of all calculations."
+  >
+    Mass Buff. Grants 2 stacks of <NumeralPerceptionEffect /> to all allies,
+    gains 2 stacks of <EnlightenmentEffect />, and gains Eureka +2.
   </CardInfo>
 </div>
 
@@ -153,3 +204,10 @@ to **3** stacks; Eureka gained increased to **3**.
 to **3** stacks; Eureka gained increased to **4**.
 
 ## Insight Materials
+
+| <div class="flex items-center"><img class="w-5 h-5 mr-2" src="/data/insight/insight-1.png" alt="insight-1-icon" /><span class="font-bold">Insight 1</span></div> | <div class="flex items-center"><img class="w-5 h-5 mr-2" src="/data/insight/insight-2.png" alt="insight-2-icon" /><span class="font-bold">Insight 2</span></div> | <div class="flex items-center"><img class="w-5 h-5 mr-2" src="/data/insight/insight-3.png" alt="insight-3-icon" /><span class="font-bold">Insight 3</span></div> |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <Material type="SHARPODONTY" variant="small" require={18000} />                                                                                                  | <Material type="SHARPODONTY" variant="small" require={40000} />                                                                                                  | <Material type="SHARPODONTY" variant="small" require={200000} />                                                                                                 |
+| <Material type="PAGE_OF_STARLIT_ASCENT" variant="small" require={6} />                                                                                           | <Material type="SCROLL_OF_STARLIT_ASCENT" variant="small" require={10} />                                                                                        | <Material type="TOME_OF_STARLIT_ASCENT" variant="small" require={16} />                                                                                          |
+| <Material type="LIQUEFIED_TERROR" variant="small" require={5} />                                                                                                 | <Material type="WINGED_KEY" variant="small" require={6} />                                                                                                       | <Material type="SERPENT_SCEPTER" variant="small" require={3} />                                                                                                  |
+| <Material type="MAGNESIA_CRYSTAL" variant="small" require={6} />                                                                                                 | <Material type="ESOTERIC_BONES" variant="small" require={6} />                                                                                                   | <Material type="BOGEYMAN" variant="small" require={5} />                                                                                                         |
