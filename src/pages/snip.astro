@@ -317,8 +317,6 @@
     },
 
     renderPreprocessedImage() {
-      if (!this.imageData) return;
-
       const { width, height, x, y } = this.rect;
       const aspectRatioY = this.video.videoHeight / this.canvas.height;
       const aspectRatioX = this.video.videoWidth / this.canvas.width;
@@ -356,8 +354,6 @@
     },
 
     updatePreprocessedImage() {
-      if (!this.imageData) return;
-
       this.renderPreprocessedImage();
       this.recognizeImage(this.imageData);
     },
