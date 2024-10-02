@@ -12,7 +12,8 @@
       "@config/*": ["src/config/*"],
       "@data/*": ["src/data/*"],
       "@pages/*": ["src/pages/*"],
-      "@styles/*": ["src/styles/*"]
+      "@styles/*": ["src/styles/*"],
+      "@scripts/*": ["src/scripts/*"]
     },
     "jsx": "react-jsx",
     "jsxImportSource": "react"
