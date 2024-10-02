@@ -23,10 +23,16 @@
           @mousemove="mouseMoveOnCanvas"
           @mouseup="mouseUpOnCanvas"></canvas>
       </div>
+      <button class="btn btn-primary text-white" @click="reset">Reset</button>
+      <div id="hint" style="margin-top: 10px">
+        Draw on the stream above to select the text area.
+      </div>
       <div class="process-wrapper">
         <div class="process-image">
           <h2>Image</h2>
-          <img id="my_img" class="image" x-ref="captureImg" />
+          <div class="image">
+            <img id="my_img" class="image" x-ref="captureImg" />
+          </div>
         </div>
         <div class="process-result">
           <h2>Result</h2>
@@ -40,13 +46,11 @@
             type="checkbox"
             id="automode"
             name="automode"
-            disabled
             checked="isAutoMode"
             @click="toggleAutoMode"
           />
           Auto Mode
         </label>
-
         <label for="showArea">
           <input
             type="checkbox"
@@ -57,7 +61,6 @@
           />
           Show Area
         </label>
-
         <label for="preprocess">
           <input
             type="checkbox"
@@ -78,10 +81,65 @@
           />
           Show Image
         </label>
+        <label for="dilate">
+          <input
+            type="checkbox"
+            id="dilate"
+            name="dilate"
+            checked="isDilate"
+            @click="toggleDilate"
+          />
+          Dilate
+        </label>
+        <label for="invertColor">
+          <input
+            type="checkbox"
+            id="invertColor"
+            name="invertColor"
+            checked="isInvertColor"
+            @click="toggleInvertColor"
+          />
+          Invert color
+        </label>
+        <label for="binarize">
+          <input
+            type="checkbox"
+            id="binarize"
+            name="binarize"
+            checked="isBinarize"
+            @click="toggleBinarize"
+          />
+          Binarize
+        </label>
+        <label for="blurImageRadius">
+          <span class="blurSliderLabel"
+            >Gaussian Blur <span x-text="blurImageRadius / 100"></span>
+          </span>
+          <input
+            id="blurImageRadius"
+            type="range"
+            min="0"
+            max="100"
+            :value="blurImageRadius"
+            @change="updateBlurImageRadius"
+            @input="onChangeBlurImageRadius"
+          />
+        </label>
+        <label for="binarizeThreshold">
+          <span class="blurSliderLabel"
+            >Binarize Threshold <span x-text="binarizeThreshold / 100"></span>
+          </span>
+          <input
+            id="binarizeThreshold"
+            type="range"
+            min="0"
+            max="100"
+            :value="binarizeThreshold"
+            @change="updateBinarizeThreshold"
+            @input="onChangeBinarizeThreshold"
+          />
+        </label>
       </div>
-    </div>
-    <div id="hint" style="margin-top: 10px">
-      Draw on the stream above to select the text area.
     </div>
   </body>
 </html>
@@ -104,7 +162,7 @@
     @apply absolute top-0 left-0 w-full h-full z-10 cursor-pointer border border-primary-content;
   }
   .options {
-    @apply p-2 border border-primary-content;
+    @apply p-2 border border-primary-content grid grid-cols-3 gap-2;
   }
   .results {
     @apply p-2 border border-primary-content flex-1 overflow-auto;
@@ -113,10 +171,13 @@
     @apply flex items-stretch min-h-60;
   }
   .process-image {
-    @apply flex-1;
+    @apply flex-1 flex flex-col;
   }
   .process-result {
     @apply flex-1 flex flex-col;
+  }
+  .image {
+    @apply flex-1 border border-primary-content;
   }
 </style>
 
@@ -149,13 +210,16 @@
     output: null,
     captureImg: null,
     ctx: null,
-    //* Image processing properties
-    radius: 1,
-    level: 0.5,
     //* Options
+    isAutoMode: true,
     isPreprocess: true,
     isShowImage: true,
     isShowArea: true,
+    isDilate: true,
+    isInvertColor: true,
+    isBinarize: true,
+    blurImageRadius: 0,
+    binarizeThreshold: 50,
 
     init() {
       this.video = this.$refs.video;
@@ -165,6 +229,22 @@
       this.canvasX = this.$refs.canvas.getBoundingClientRect().left;
       this.canvasY = this.$refs.canvas.getBoundingClientRect().top;
       this.ctx = this.$refs.canvas.getContext("2d");
+    },
+
+    reset() {
+      this.videoLoaded = false;
+      this.lastMouseY = 0;
+      this.lastMouseX = 0;
+      this.canvasX = 0;
+      this.canvasY = 0;
+      this.mouseX = 0;
+      this.mouseY = 0;
+      this.mouseDown = false;
+      this.rect = {};
+      this.imageData = null;
+      this.video.srcObject = null;
+
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     },
 
     async startCapture() {
@@ -189,11 +269,14 @@
     resizeCanvas(element) {
       this.canvas.width = element.offsetWidth;
       this.canvas.height = element.offsetHeight;
+
+      this.canvasX = this.canvas.getBoundingClientRect().left;
+      this.canvasY = this.canvas.getBoundingClientRect().top;
     },
 
-    videoOnLoad(element) {
+    videoOnLoad(e) {
       this.videoLoaded = true;
-      this.resizeCanvas(element.target);
+      this.resizeCanvas(e.target);
     },
 
     recognizeImage(img) {
@@ -204,14 +287,39 @@
         const {
           data: { text },
         } = await worker.recognize(img);
-        console.log(text);
         // writeIntoHtml("Result: " + text);
         this.output.innerHTML = text;
         await worker.terminate();
       })();
     },
 
-    showStuff({ width, height, x, y }) {
+    preprocessImage(canvas) {
+      const processedImageData = canvas
+        .getContext("2d")
+        .getImageData(0, 0, canvas.width, canvas.height);
+
+      if (this.blurImageRadius > 0) {
+        blurARGB(processedImageData.data, canvas, this.blurImageRadius / 100);
+      }
+
+      if (this.isDilate) {
+        dilate(processedImageData.data, canvas);
+      }
+
+      if (this.isInvertColor) {
+        invertColors(processedImageData.data);
+      }
+
+      if (this.isBinarize) {
+        thresholdFilter(processedImageData.data, this.binarizeThreshold / 100);
+      }
+      return processedImageData;
+    },
+
+    renderPreprocessedImage() {
+      if (!this.imageData) return;
+
+      const { width, height, x, y } = this.rect;
       const aspectRatioY = this.video.videoHeight / this.canvas.height;
       const aspectRatioX = this.video.videoWidth / this.canvas.width;
 
@@ -245,18 +353,13 @@
       } else {
         this.captureImg.hidden = true;
       }
-      this.recognizeImage(this.imageData);
     },
 
-    preprocessImage(canvas) {
-      const processedImageData = canvas
-        .getContext("2d")
-        .getImageData(0, 0, canvas.width, canvas.height);
-      blurARGB(processedImageData.data, canvas, this.radius);
-      dilate(processedImageData.data, canvas);
-      invertColors(processedImageData.data);
-      thresholdFilter(processedImageData.data, this.level);
-      return processedImageData;
+    updatePreprocessedImage() {
+      if (!this.imageData) return;
+
+      this.renderPreprocessedImage();
+      this.recognizeImage(this.imageData);
     },
 
     showLoadingOCR() {
@@ -265,9 +368,7 @@
 
     mouseDownOnCanvas(e) {
       this.lastMouseX = e.clientX - this.canvasX;
-      console.log("🚀 ~ mouseDownOnCanvas ~ e.clientX:", e.clientX);
       this.lastMouseY = e.clientY - this.canvasY;
-      console.log("🚀 ~ mouseDownOnCanvas ~ e.clientY:", e.clientY);
       this.mouseDown = true;
     },
 
@@ -292,16 +393,30 @@
       this.mouseDown = false;
 
       if (this.rect.width > 0) {
-        if (true) {
-          console.log("its checked");
-          // clearInterval();
+        if (this.isAutoMode) {
+          let automodeIntevalId;
+
           this.showLoadingOCR();
-          setInterval(this.showStuff(this.rect), 500);
+          automodeIntevalId = setInterval(this.updatePreprocessedImage(), 500);
+
+          setTimeout(() => {
+            clearInterval(automodeIntevalId);
+          }, 700);
         } else {
           this.showLoadingOCR();
-          this.showStuff(this.rect);
+          this.updatePreprocessedImage();
           this.hint.innerHTML = "Click on stream to refresh.";
         }
+      }
+    },
+
+    toggleAutoMode() {
+      this.isAutoMode = !this.isAutoMode;
+      let automodeIntevalId;
+      if (this.isAutoMode) {
+        automodeIntevalId = setInterval(this.updatePreprocessedImage(), 500);
+      } else {
+        clearInterval(automodeIntevalId);
       }
     },
 
@@ -319,7 +434,7 @@
       this.isPreprocess = !this.isPreprocess;
       let preprocessIntevelId;
       if (this.isPreprocess) {
-        preprocessIntevelId = setInterval(this.showStuff(this.rect), 500);
+        preprocessIntevelId = setInterval(this.updatePreprocessedImage(), 500);
       } else {
         clearInterval(preprocessIntevelId);
       }
@@ -344,14 +459,39 @@
       }
     },
 
-    toggleAutoMode() {
-      this.isAutoMode = !this.isAutoMode;
-      let automodeIntevelId;
-      if (this.isAutoMode) {
-        automodeIntevelId = setInterval(this.showStuff(this.rect), 500);
-      } else {
-        clearInterval(automodeIntevelId);
-      }
+    toggleDilate() {
+      this.isDilate = !this.isDilate;
+      this.updatePreprocessedImage();
+    },
+
+    toggleInvertColor() {
+      this.isInvertColor = !this.isInvertColor;
+      this.updatePreprocessedImage();
+    },
+
+    toggleBinarize() {
+      this.isBinarize = !this.isBinarize;
+      this.updatePreprocessedImage();
+    },
+
+    onChangeBlurImageRadius(e) {
+      this.blurImageRadius = parseInt(e.target.value, 10);
+      this.renderPreprocessedImage();
+    },
+
+    updateBlurImageRadius(e) {
+      this.blurImageRadius = parseInt(e.target.value, 10);
+      this.updatePreprocessedImage();
+    },
+
+    onChangeBinarizeThreshold(e) {
+      this.binarizeThreshold = parseInt(e.target.value, 10);
+      this.renderPreprocessedImage();
+    },
+
+    updateBinarizeThreshold(e) {
+      this.binarizeThreshold = parseInt(e.target.value, 10);
+      this.updatePreprocessedImage();
     },
   }));
 </script>
