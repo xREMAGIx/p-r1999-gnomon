@@ -74,8 +74,8 @@
       "5",
       {
         shape: [
-          [1, 1, 1],
           [0, 1, 0],
+          [1, 1, 1],
         ],
       },
     ],
@@ -83,8 +83,8 @@
       "6",
       {
         shape: [
-          [1, 1, 1],
           [1, 0, 1],
+          [1, 1, 1],
         ],
       },
     ],
@@ -151,101 +151,6 @@
       this.ctx.fill();
     },
 
-    sortPointsClockwise(points) {
-      const centroidX =
-        points.reduce((acc, point) => acc + point.x, 0) / points.length;
-      const centroidY =
-        points.reduce((acc, point) => acc + point.y, 0) / points.length;
-
-      const angles = points.map((point) => {
-        const dx = point.x - centroidX;
-        const dy = point.y - centroidY;
-        const angle = Math.atan2(dy, dx);
-        return angle;
-      });
-
-      return points.slice().sort((a, b) => {
-        const angleA = angles[points.indexOf(a)];
-        const angleB = angles[points.indexOf(b)];
-        return (angleA - angleB) % (2 * Math.PI);
-      });
-    },
-
-    sortPointsCounterClockwise(points) {
-      const centroidX =
-        points.reduce((acc, point) => acc + point.x, 0) / points.length;
-      const centroidY =
-        points.reduce((acc, point) => acc + point.y, 0) / points.length;
-
-      const angles = points.map((point) => {
-        const dx = point.x - centroidX;
-        const dy = point.y - centroidY;
-        const angle = Math.atan2(dy, dx);
-        return angle;
-      });
-
-      return points.slice().sort((a, b) => {
-        const angleA = angles[points.indexOf(a)];
-        const angleB = angles[points.indexOf(b)];
-        return (angleB - angleA) % (2 * Math.PI);
-      });
-    },
-
-    // sortClockwise(points) {
-    //   // Find min max to get center
-    //   // Sort from top to bottom
-    //   points.sort((a, b) => a.y - b.y);
-
-    //   // Get center y
-    //   const cy = (points[0].y + points[points.length - 1].y) / 2;
-
-    //   // Sort from right to left
-    //   points.sort((a, b) => b.x - a.x);
-
-    //   // Get center x
-    //   const cx = (points[0].x + points[points.length - 1].x) / 2;
-
-    //   // Center point
-    //   const center = { x: cx, y: cy };
-
-    //   // Pre calculate the angles as it will be slow in the sort
-    //   // As the points are sorted from right to left the first point
-    //   // is the rightmost
-
-    //   // Starting angle used to reference other angles
-    //   var startAng;
-    //   points.forEach((point) => {
-    //     var ang = Math.atan2(point.y - center.y, point.x - center.x);
-    //     if (!startAng) {
-    //       startAng = ang;
-    //     } else {
-    //       if (ang < startAng) {
-    //         // ensure that all points are clockwise of the start point
-    //         ang += Math.PI * 2;
-    //       }
-    //     }
-    //     point.angle = ang; // add the angle to the point
-    //   });
-
-    //   // Sort clockwise;
-    //   points.sort((a, b) => a.angle - b.angle);
-    //   return points;
-    // },
-
-    // sortAntiClockwise(points) {
-    //   // first sort clockwise
-    //   const cwPoints = this.sortPointsClockwise(points).sort(
-    //     (a, b) => a.angle - b.angle
-    //   );
-
-    //   // then reverse the order
-    //   const ccwPoints = cwPoints.reverse();
-
-    //   // move the last point back to the start
-    //   ccwPoints.unshift(ccwPoints.pop());
-    //   return ccwPoints;
-    // },
-
     onDragStart(event) {
       if (!event.target.attributes["data-block-id"]) return;
       const blockId = event.target.attributes["data-block-id"].value;
@@ -267,23 +172,6 @@
       const blockShapeDimension = blockShapeMatrix.size();
       const shapeRow = blockShapeDimension[0];
       const shapeCol = blockShapeDimension[1];
-
-      let points: { x: number; y: number }[] = [];
-      for (let col = 0; col < shapeCol; col++) {
-        for (let row = 0; row < shapeRow; row++) {
-          if (blockShapeMatrix(row, col)) {
-            const x = col * BLOCK_SIZE;
-            const y = row * BLOCK_SIZE;
-
-            points = points.concat([
-              { x: x, y: y },
-              { x: (col + 1) * BLOCK_SIZE, y: y },
-              { x: (col + 1) * BLOCK_SIZE, y: (row + 1) * BLOCK_SIZE },
-              { x: x, y: (row + 1) * BLOCK_SIZE },
-            ]);
-          }
-        }
-      }
 
       let itemBlocks: any[] = [];
 
@@ -307,90 +195,33 @@
       itemBlocks.forEach((element) => {
         const eleBlock = {
           type: "Feature",
-          geometry: { type: "Polygon", coordinates: [[...element]] },
+          geometry: {
+            type: "Polygon",
+            coordinates: [[...element, element[0]]],
+          },
         } as any;
 
         if (!itemGeometry) {
           itemGeometry = eleBlock;
         } else {
-          console.log(
-            "🚀 ~ eleBlock.geometry.coordinates:",
-            eleBlock.geometry.coordinates[0]
-          );
-          console.log(
-            "🚀 ~ eleBlock.geometry.coordinates:",
-            itemGeometry.geometry.coordinates[0]
-          );
-
           const newPolyBlockCoords = union(
             itemGeometry.geometry.coordinates,
             eleBlock.geometry.coordinates
           );
 
-          console.log("newPolyBlockCoords", newPolyBlockCoords[0]);
-
           itemGeometry = {
             type: "Feature",
             geometry: {
-              type: "Polygon",
-              coordinates: newPolyBlockCoords[0],
+              type: "MultiPolygon",
+              coordinates: newPolyBlockCoords,
             },
           };
         }
       });
 
-      const data = {
-        type: "FeatureCollection",
-        features: [
-          {
-            type: "Feature",
-            properties: {},
-            geometry: {
-              type: "Polygon",
-              coordinates: [
-                [
-                  [80, 40],
-                  [120, 40],
-                  [120, 80],
-                  [80, 80],
-                ],
-              ],
-            },
-          },
-          {
-            type: "Feature",
-            properties: {},
-            geometry: {
-              type: "Polygon",
-              coordinates: [
-                [
-                  [0, 0],
-                  [40, 0],
-                  [80, 0],
-                  [120, 0],
-                  [120, 40],
-                  [80, 40],
-                  [40, 40],
-                  [40, 80],
-                  [0, 80],
-                ],
-              ],
-            },
-          },
-        ],
-      };
-
-      const itemUnion = union(
-        data.features[0].geometry.coordinates,
-        data.features[1].geometry.coordinates
-      );
-
-      console.log(itemUnion);
-
-      const polyPoints = itemGeometry.geometry.coordinates[0].map((p) =>
-        V(p[0], p[1])
-      );
-      console.log("🚀 ~ onDragStart ~ polyPoints:", polyPoints);
+      const polyPoints = itemGeometry.geometry.coordinates
+        .flat(2)
+        .map((p) => V(p[0], p[1]));
 
       this.polyPoints = polyPoints;
 
@@ -502,8 +333,8 @@
     },
 
     sweepAndPrune(item, blocks) {
-      const sweepRadius = 42; // (slightly larger than the block size) is the maximum distance between the item's position and a block's position that is considered "close enough" to warrant a collision check
-      const pruneRadius = 45; // (slightly larger than the sweepRadius) is the maximum distance between the item's position and a block's position that is considered "far enough" to warrant pruning the block from the search space
+      const sweepRadius = BLOCK_SIZE * 2; // (slightly larger than the block size) is the maximum distance between the item's position and a block's position that is considered "close enough" to warrant a collision check
+      const pruneRadius = BLOCK_SIZE * 3; // (slightly larger than the sweepRadius) is the maximum distance between the item's position and a block's position that is considered "far enough" to warrant pruning the block from the search space
       for (const block of blocks) {
         const idx = blocks.indexOf(block);
         const column = Math.floor(item.pos.x / BLOCK_SIZE);
@@ -513,31 +344,22 @@
           ...JSON.parse(JSON.stringify(this.polyPoints)),
         ]);
 
-        // const distance = this.distanceBetween(item.pos, block.pos);
-        // if (distance > sweepRadius) continue; // Prune blocks that are too far away
+        const distance = this.distanceBetween(item.pos, block.pos);
+        if (distance > sweepRadius) continue; // Prune blocks that are too far away
 
         this.drawPoly(itemPoly, "rgba(0,255,0,1)");
 
         const collision = this.checkCollision(itemPoly, block);
 
         if (collision) {
-          console.log("🚀 ~ sweepAndPrune ~ block:", block);
           blocks[idx].isCollided = true;
           // return true; // Collision detected, return true
         }
 
-        // if (distance > pruneRadius) continue; // Prune blocks that are too far away
+        if (distance > pruneRadius) continue; // Prune blocks that are too far away
       }
 
       // return false; // No collision detected
     },
   }));
 </script>
-
-[ [ [ [ 40, 0 ], [ 80, 0 ], [ 80, 40 ], [ 40, 40 ] ] ] ]
-
-<div></div>
-[ [ [ 0, 40 ], [ 40, 40 ], [ 40, 80 ], [ 0, 80 ] ] ]
-<div></div>
-[ [ [ [ 0, 0 ], [ 40, 0 ], [ 80, 0 ], [ 120, 0 ], [ 120, 40 ], [ 120, 80 ], [ 80,
-80 ], [ 40, 40 ], [ 40, 80 ], [ 0, 80 ] ] ] ]
