@@ -83,8 +83,8 @@
       "6",
       {
         shape: [
-          [1, 1, 0],
           [1, 1, 1],
+          [1, 0, 1],
         ],
       },
     ],
@@ -285,16 +285,112 @@
         }
       }
 
-      const uniquePoints = [
-        ...new Set(points.map((ele) => JSON.stringify(ele))),
-      ].map((ele) => JSON.parse(ele));
+      let itemBlocks: any[] = [];
 
-      const clockwisePoints = this.sortPointsClockwise([...uniquePoints]);
-      const counterClockwisePoints = this.sortPointsCounterClockwise([
-        ...uniquePoints,
-      ]);
+      for (let row = 0; row < shapeRow; row++) {
+        for (let col = 0; col < shapeCol; col++) {
+          if (blockShapeMatrix(row, col)) {
+            const x = col * BLOCK_SIZE;
+            const y = row * BLOCK_SIZE;
 
-      const polyPoints = clockwisePoints.map((p) => V(p.x, p.y));
+            itemBlocks.push([
+              [x, y],
+              [(col + 1) * BLOCK_SIZE, y],
+              [(col + 1) * BLOCK_SIZE, (row + 1) * BLOCK_SIZE],
+              [x, (row + 1) * BLOCK_SIZE],
+            ]);
+          }
+        }
+      }
+
+      let itemGeometry;
+      itemBlocks.forEach((element) => {
+        const eleBlock = {
+          type: "Feature",
+          geometry: { type: "Polygon", coordinates: [[...element]] },
+        } as any;
+
+        if (!itemGeometry) {
+          itemGeometry = eleBlock;
+        } else {
+          console.log(
+            "🚀 ~ eleBlock.geometry.coordinates:",
+            eleBlock.geometry.coordinates[0]
+          );
+          console.log(
+            "🚀 ~ eleBlock.geometry.coordinates:",
+            itemGeometry.geometry.coordinates[0]
+          );
+
+          const newPolyBlockCoords = union(
+            itemGeometry.geometry.coordinates,
+            eleBlock.geometry.coordinates
+          );
+
+          console.log("newPolyBlockCoords", newPolyBlockCoords[0]);
+
+          itemGeometry = {
+            type: "Feature",
+            geometry: {
+              type: "Polygon",
+              coordinates: newPolyBlockCoords[0],
+            },
+          };
+        }
+      });
+
+      const data = {
+        type: "FeatureCollection",
+        features: [
+          {
+            type: "Feature",
+            properties: {},
+            geometry: {
+              type: "Polygon",
+              coordinates: [
+                [
+                  [80, 40],
+                  [120, 40],
+                  [120, 80],
+                  [80, 80],
+                ],
+              ],
+            },
+          },
+          {
+            type: "Feature",
+            properties: {},
+            geometry: {
+              type: "Polygon",
+              coordinates: [
+                [
+                  [0, 0],
+                  [40, 0],
+                  [80, 0],
+                  [120, 0],
+                  [120, 40],
+                  [80, 40],
+                  [40, 40],
+                  [40, 80],
+                  [0, 80],
+                ],
+              ],
+            },
+          },
+        ],
+      };
+
+      const itemUnion = union(
+        data.features[0].geometry.coordinates,
+        data.features[1].geometry.coordinates
+      );
+
+      console.log(itemUnion);
+
+      const polyPoints = itemGeometry.geometry.coordinates[0].map((p) =>
+        V(p[0], p[1])
+      );
+      console.log("🚀 ~ onDragStart ~ polyPoints:", polyPoints);
 
       this.polyPoints = polyPoints;
 
@@ -437,3 +533,11 @@
     },
   }));
 </script>
+
+[ [ [ [ 40, 0 ], [ 80, 0 ], [ 80, 40 ], [ 40, 40 ] ] ] ]
+
+<div></div>
+[ [ [ 0, 40 ], [ 40, 40 ], [ 40, 80 ], [ 0, 80 ] ] ]
+<div></div>
+[ [ [ [ 0, 0 ], [ 40, 0 ], [ 80, 0 ], [ 120, 0 ], [ 120, 40 ], [ 120, 80 ], [ 80,
+80 ], [ 40, 40 ], [ 40, 80 ], [ 0, 80 ] ] ] ]
