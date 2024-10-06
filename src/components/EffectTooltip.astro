@@ -1,12 +1,17 @@
 ---
 interface Props {
   effect: string;
+  description?: string;
 }
 
-const { effect } = Astro.props;
+const { effect, description, ...props } = Astro.props;
 ---
 
-<span x-data="{isShow: false, isToggle: false}" class="inline-block relative">
+<span
+  {...props}
+  x-data="{isShow: false, isToggle: false}"
+  class="inline-block relative"
+>
   <span
     @click="isToggle = !isToggle"
     @click.outside="isToggle = false"
@@ -18,6 +23,7 @@ const { effect } = Astro.props;
     class="absolute block bottom-full left-1/2 -translate-x-1/2 bg-base-100 w-40 text-base-content border-line-paper border p-2 transition-all duration-300"
     :class="isShow || isToggle ? 'visible opacity-100' : 'invisible opacity-0'"
   >
+    <Fragment set:html={description} />
     <slot />
   </span>
 </span>

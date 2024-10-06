@@ -55,3 +55,7 @@ h6 {
 .highlight {
   @apply text-primary font-bold;
 }
+
+strong {
+  @apply text-primary font-bold;
+}

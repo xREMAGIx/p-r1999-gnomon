@@ -83,8 +83,8 @@
       "6",
       {
         shape: [
-          [1, 0, 1],
-          [1, 1, 1],
+          [1, 0, 1, 0],
+          [1, 1, 1, 1],
         ],
       },
     ],
@@ -333,8 +333,8 @@
     },
 
     sweepAndPrune(item, blocks) {
-      const sweepRadius = BLOCK_SIZE * 2; // (slightly larger than the block size) is the maximum distance between the item's position and a block's position that is considered "close enough" to warrant a collision check
-      const pruneRadius = BLOCK_SIZE * 3; // (slightly larger than the sweepRadius) is the maximum distance between the item's position and a block's position that is considered "far enough" to warrant pruning the block from the search space
+      const sweepRadius = BLOCK_SIZE * 3; // (slightly larger than the block size) is the maximum distance between the item's position and a block's position that is considered "close enough" to warrant a collision check
+      const pruneRadius = BLOCK_SIZE * 4; // (slightly larger than the sweepRadius) is the maximum distance between the item's position and a block's position that is considered "far enough" to warrant pruning the block from the search space
       for (const block of blocks) {
         const idx = blocks.indexOf(block);
         const column = Math.floor(item.pos.x / BLOCK_SIZE);

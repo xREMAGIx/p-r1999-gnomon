@@ -1,133 +1,136 @@
 ---
 import { AFFLATUS_TYPE } from "@config/constants";
+import Layout from "@layouts/Layout.astro";
 ---
 
-<h1>Character List</h1>
+<Layout title="Reverse 1999 Gnomon">
+  <h1>Character List</h1>
 
-<div x-data={"dataset"}>
-  <div class="filters">
-    <div class="grid grid-cols-filter">
-      <div class="py-2 px-4">Rarity</div>
-      <ul class="py-2 px-4 flex gap-1">
-        <template x-for="rarity in rarities">
-          <li>
-            <button
-              class="btn btn-outline btn-xs"
-              :class="rarity === rarityFilter ? 'btn-active' : ''"
-              @click="filterRarity(rarity)"
-              x-text="rarity"
-            >
-            </button>
-          </li>
-        </template>
-      </ul>
+  <div x-data={"dataset"}>
+    <div class="filters">
+      <div class="grid grid-cols-filter">
+        <div class="py-2 px-4">Rarity</div>
+        <ul class="py-2 px-4 flex gap-1">
+          <template x-for="rarity in rarities">
+            <li>
+              <button
+                class="btn btn-outline btn-xs"
+                :class="rarity === rarityFilter ? 'btn-active' : ''"
+                @click="filterRarity(rarity)"
+                x-text="rarity"
+              >
+              </button>
+            </li>
+          </template>
+        </ul>
 
-      <div class="py-2 px-4">Element type</div>
-      <ul class="py-2 px-4 flex gap-1">
-        <template x-for="afflatusType in afflatusTypes">
-          <li>
-            <button
-              class="btn btn-outline btn-xs"
-              :class="afflatusType === afflatusTypeFilter ? 'btn-active' : ''"
-              @click="filterElementType(afflatusType)"
-              x-text="afflatusType"
-            >
-            </button>
-          </li>
-        </template>
-      </ul>
+        <div class="py-2 px-4">Element type</div>
+        <ul class="py-2 px-4 flex gap-1">
+          <template x-for="afflatusType in afflatusTypes">
+            <li>
+              <button
+                class="btn btn-outline btn-xs"
+                :class="afflatusType === afflatusTypeFilter ? 'btn-active' : ''"
+                @click="filterElementType(afflatusType)"
+                x-text="afflatusType"
+              >
+              </button>
+            </li>
+          </template>
+        </ul>
 
-      <div class="py-2 px-4">Damage type</div>
-      <ul class="py-2 px-4 flex gap-1">
-        <template x-for="dmgType in dmgTypes">
-          <li>
-            <button
-              class="btn btn-outline btn-xs"
-              :class="dmgType === dmgTypeFilter ? 'btn-active' : ''"
-              @click="filterDmgType(dmgType)"
-              x-text="dmgType"
-            >
-            </button>
-          </li>
-        </template>
-      </ul>
+        <div class="py-2 px-4">Damage type</div>
+        <ul class="py-2 px-4 flex gap-1">
+          <template x-for="dmgType in dmgTypes">
+            <li>
+              <button
+                class="btn btn-outline btn-xs"
+                :class="dmgType === dmgTypeFilter ? 'btn-active' : ''"
+                @click="filterDmgType(dmgType)"
+                x-text="dmgType"
+              >
+              </button>
+            </li>
+          </template>
+        </ul>
+      </div>
     </div>
-  </div>
 
-  <ul class="grid grid-cols-6 gap-4">
-    <template x-for="character in characters" :key="character.id">
-      <li>
-        <div
-          class="card card-compact bg-base-100 h-64 border-base-content border shadow-xl"
-        >
-          <div class="card-body relative">
-            <div class="absolute top-0 left-0">
-              <template
-                x-if={`character.afflatusType === '${AFFLATUS_TYPE.MINERAL}'`}
-              >
-                <img
-                  src="/data/afflatus/at-mineral.png"
-                  alt="Mineral"
-                  class="w-5 aspect-[3/5]"
-                />
-              </template>
-              <template
-                x-if={`character.afflatusType === '${AFFLATUS_TYPE.STAR}'`}
-              >
-                <img
-                  src="/data/afflatus/at-star.png"
-                  alt="Star"
-                  class="w-5 aspect-[3/5]"
-                />
-              </template>
-              <template
-                x-if={`character.afflatusType === '${AFFLATUS_TYPE.PLANT}'`}
-              >
-                <img
-                  src="/data/afflatus/at-plant.png"
-                  alt="Plant"
-                  class="w-5 aspect-[3/5]"
-                />
-              </template>
-              <template
-                x-if={`character.afflatusType === '${AFFLATUS_TYPE.BEAST}'`}
-              >
-                <img
-                  src="/data/afflatus/at-beast.png"
-                  alt="Beast"
-                  class="w-5 aspect-[3/5]"
-                />
-              </template>
-              <template
-                x-if={`character.afflatusType === '${AFFLATUS_TYPE.SPIRIT}'`}
-              >
-                <img
-                  src="/data/afflatus/at-spirit.png"
-                  alt="Spirit"
-                  class="w-5 aspect-[3/5]"
-                />
-              </template>
-              <template
-                x-if={`character.afflatusType === '${AFFLATUS_TYPE.INTELLECT}'`}
-              >
-                <img
-                  src="/data/afflatus/at-intellect.png"
-                  alt="Intellect"
-                  class="w-5 aspect-[3/5]"
-                />
-              </template>
+    <ul class="grid grid-cols-6 gap-4">
+      <template x-for="character in characters" :key="character.id">
+        <li>
+          <div
+            class="card card-compact bg-base-100 h-64 border-base-content border shadow-xl"
+          >
+            <div class="card-body relative">
+              <div class="absolute top-0 left-0">
+                <template
+                  x-if={`character.afflatusType === '${AFFLATUS_TYPE.MINERAL}'`}
+                >
+                  <img
+                    src="/data/afflatus/at-mineral.png"
+                    alt="Mineral"
+                    class="w-5 aspect-[3/5]"
+                  />
+                </template>
+                <template
+                  x-if={`character.afflatusType === '${AFFLATUS_TYPE.STAR}'`}
+                >
+                  <img
+                    src="/data/afflatus/at-star.png"
+                    alt="Star"
+                    class="w-5 aspect-[3/5]"
+                  />
+                </template>
+                <template
+                  x-if={`character.afflatusType === '${AFFLATUS_TYPE.PLANT}'`}
+                >
+                  <img
+                    src="/data/afflatus/at-plant.png"
+                    alt="Plant"
+                    class="w-5 aspect-[3/5]"
+                  />
+                </template>
+                <template
+                  x-if={`character.afflatusType === '${AFFLATUS_TYPE.BEAST}'`}
+                >
+                  <img
+                    src="/data/afflatus/at-beast.png"
+                    alt="Beast"
+                    class="w-5 aspect-[3/5]"
+                  />
+                </template>
+                <template
+                  x-if={`character.afflatusType === '${AFFLATUS_TYPE.SPIRIT}'`}
+                >
+                  <img
+                    src="/data/afflatus/at-spirit.png"
+                    alt="Spirit"
+                    class="w-5 aspect-[3/5]"
+                  />
+                </template>
+                <template
+                  x-if={`character.afflatusType === '${AFFLATUS_TYPE.INTELLECT}'`}
+                >
+                  <img
+                    src="/data/afflatus/at-intellect.png"
+                    alt="Intellect"
+                    class="w-5 aspect-[3/5]"
+                  />
+                </template>
+              </div>
+
+              <span
+                class="absolute top-0 right-0 bg-primary-content text-white px-2"
+                x-text="character.version"></span>
+              <h2 class="card-title" x-text="character.title"></h2>
             </div>
-
-            <span
-              class="absolute top-0 right-0 bg-primary-content text-white px-2"
-              x-text="character.version"></span>
-            <h2 class="card-title" x-text="character.title"></h2>
           </div>
-        </div>
-      </li>
-    </template>
-  </ul>
-</div>
+        </li>
+      </template>
+    </ul>
+  </div>
+</Layout>
 
 <script>
   import { DMG_TYPE, AFFLATUS_TYPE, RARITY } from "@config/constants";

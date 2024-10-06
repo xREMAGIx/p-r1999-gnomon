@@ -1,5 +1,7 @@
 import EffectTooltip from "@components/EffectTooltip.astro";
 import MarkdownHighlight from "@components/MarkdownHighlight.astro";
+import { EFFECTS } from "@data/effects";
+import {micromark} from 'micromark'
 
 export const components = { strong: MarkdownHighlight };
 
@@ -36,6 +38,13 @@ export function NumeralPerceptionEffect() {
     <EffectTooltip effect="[Numeral Perception]">
       ATK <MarkdownHighlight>+10%</MarkdownHighlight> (-1 stack after
       attacking).
+    </EffectTooltip>
+  );
+}
+
+export function CeremoniousEffect() {
+  return (
+    <EffectTooltip effect={`[${EFFECTS["CEREMONIOUS"].name}]`} description={micromark(EFFECTS["CEREMONIOUS"].description)}>
     </EffectTooltip>
   );
 }
