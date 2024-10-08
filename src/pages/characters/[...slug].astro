@@ -1,4 +1,6 @@
 ---
+import EffectTooltip from "@components/EffectTooltip.astro";
+import MarkdownHighlight from "@components/MarkdownHighlight.astro";
 import MarkdownLayout from "@layouts/MarkdownLayout.astro";
 import { getCollection } from "astro:content";
 
@@ -15,5 +17,5 @@ const { Content } = await entry.render();
 ---
 
 <MarkdownLayout title={`${entry.data.title} | Character`}>
-  <Content />
+  <Content components={{ abbr: MarkdownHighlight, effect: EffectTooltip }} />
 </MarkdownLayout>

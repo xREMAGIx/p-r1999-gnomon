@@ -1,0 +1,11 @@
+---
+import { markdownParser } from "@scripts/markdown";
+
+interface Props {
+  markdown: string;
+}
+
+const { markdown, ...props } = Astro.props;
+---
+
+<Fragment {...props} set:html={markdownParser(markdown)} />

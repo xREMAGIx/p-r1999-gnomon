@@ -1,7 +1,8 @@
 import EffectTooltip from "@components/EffectTooltip.astro";
 import MarkdownHighlight from "@components/MarkdownHighlight.astro";
 import { EFFECTS } from "@data/effects";
-import {micromark} from 'micromark'
+import { markdownParser } from "@scripts/markdown";
+import { micromark } from "micromark";
 
 export const components = { strong: MarkdownHighlight };
 
@@ -43,8 +44,16 @@ export function NumeralPerceptionEffect() {
 }
 
 export function CeremoniousEffect() {
-  return (
-    <EffectTooltip effect={`[${EFFECTS["CEREMONIOUS"].name}]`} description={micromark(EFFECTS["CEREMONIOUS"].description)}>
-    </EffectTooltip>
+  console.log(
+    markdownParser(
+      `A lovely language know as :abbr[HTML]{title="HyperText Markup Language"}.`
+    )
   );
-}
+
+return (
+
+<EffectTooltip
+  effect={`[${EFFECTS["CEREMONIOUS"].name}]`}
+  description={markdownParser(EFFECTS["CEREMONIOUS"].description)}
+></EffectTooltip>
+); }
