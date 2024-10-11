@@ -22,7 +22,6 @@ import {
 import ResonateBoard from "@components/ResonateBoard.astro";
 import MarkdownParser from "@components/MarkdownParser.astro";
 import { EFFECTS } from "@data/effects";
-import { markdownParser } from "@scripts/markdown";
 
 export const components = {
   strong: MarkdownHighlight,
@@ -203,12 +202,6 @@ to **3** stacks; Eureka gained increased to **3**.
 
 <span class="text-2xl">Lv. 5:</span> Kingdom of Geometry: <NumeralPerceptionEffect /> increased
 to **3** stacks; Eureka gained increased to **4**.
-
-{markdownParser(EFFECTS["CEREMONIOUS"].description)}
-
-<MarkdownParser markdown={EFFECTS["CEREMONIOUS"].description} />
-
-{/* :effect{effect='CEREMONIOUS' description="HyperText Markup Language"} */}
 
 ## Insight Materials
 

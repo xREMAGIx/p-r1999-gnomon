@@ -1,10 +1,26 @@
 ---
+import { getCollection } from "astro:content";
+import MarkdownHighlight from "./MarkdownHighlight.astro";
+import MarkdownContent from "./MarkdownContent.astro";
 interface Props {
-  effect: string;
-  description?: string;
+  code: string;
 }
 
-const { effect, description, ...props } = Astro.props;
+const { code, ...props } = Astro.props;
+
+const effectEntries = await getCollection("effects");
+
+const effects = effectEntries.reduce((prev, curr) => {
+  console.log(curr.data.code);
+  return {
+    ...prev,
+    [curr.data.code]: curr,
+  };
+}, {});
+
+const effect = effects[code];
+
+const { Content } = await effect.render();
 ---
 
 <span
@@ -17,13 +33,17 @@ const { effect, description, ...props } = Astro.props;
     @click.outside="isToggle = false"
     @mouseenter="isShow = true"
     @mouseleave="isShow = false"
-    class="text-effect cursor-pointer">{effect}</span
+    class="text-effect cursor-pointer">{effect.data.title}</span
   >
-  <span
+  <div
     class="absolute block bottom-full left-1/2 -translate-x-1/2 bg-base-100 w-40 text-base-content border-line-paper border p-2 transition-all duration-300"
     :class="isShow || isToggle ? 'visible opacity-100' : 'invisible opacity-0'"
   >
-    <Fragment set:html={description} />
-    <slot />
-  </span>
+    <Content
+      components={{
+        p: MarkdownContent,
+        strong: MarkdownHighlight,
+      }}
+    />
+  </div>
 </span>
