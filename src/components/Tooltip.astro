@@ -1,9 +1,10 @@
 ---
 interface Props {
-  content: string;
+  title: string;
+  content?: string;
 }
 
-const { content, ...props } = Astro.props;
+const { title, content, ...props } = Astro.props;
 ---
 
 <span
@@ -18,13 +19,13 @@ const { content, ...props } = Astro.props;
     @mouseleave="isShow = false"
     class="text-effect cursor-pointer"
   >
-    <slot />
+    {title}
   </span>
   <span
     class="absolute block bottom-full left-1/2 -translate-x-1/2 bg-base-100 w-40 text-base-content border-line-paper border p-2 transition-all duration-300"
     :class="isShow || isToggle ? 'visible opacity-100' : 'invisible opacity-0'"
   >
-    <Fragment set:html={content} />
+    {content && <Fragment set:html={content} />}
     <slot />
   </span>
 </span>

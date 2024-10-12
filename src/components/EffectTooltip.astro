@@ -11,7 +11,6 @@ const { code, ...props } = Astro.props;
 const effectEntries = await getCollection("effects");
 
 const effects = effectEntries.reduce((prev, curr) => {
-  console.log(curr.data.code);
   return {
     ...prev,
     [curr.data.code]: curr,
@@ -33,7 +32,7 @@ const { Content } = await effect.render();
     @click.outside="isToggle = false"
     @mouseenter="isShow = true"
     @mouseleave="isShow = false"
-    class="text-effect cursor-pointer">{effect.data.title}</span
+    class="text-effect cursor-pointer">[{effect.data.title}]</span
   >
   <div
     class="absolute block bottom-full left-1/2 -translate-x-1/2 bg-base-100 w-40 text-base-content border-line-paper border p-2 transition-all duration-300"

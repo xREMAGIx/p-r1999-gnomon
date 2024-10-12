@@ -4,9 +4,9 @@ import Layout from "@layouts/Layout.astro";
 ---
 
 <Layout title="Reverse 1999 Gnomon">
-  <h1>Character List</h1>
+  <h1 class="text-center">Character List</h1>
 
-  <div x-data={"dataset"}>
+  <div x-data={"dataset"} class="mt-10">
     <div class="filters">
       <div class="grid grid-cols-filter">
         <div class="py-2 px-4">Rarity</div>
@@ -56,75 +56,77 @@ import Layout from "@layouts/Layout.astro";
       </div>
     </div>
 
-    <ul class="grid grid-cols-6 gap-4">
+    <ul class="mt-8 grid grid-cols-6 gap-4">
       <template x-for="character in characters" :key="character.id">
         <li>
           <div
             class="card card-compact bg-base-100 h-64 border-base-content border shadow-xl"
           >
-            <div class="card-body relative">
-              <div class="absolute top-0 left-0">
-                <template
-                  x-if={`character.afflatusType === '${AFFLATUS_TYPE.MINERAL}'`}
-                >
-                  <img
-                    src="/data/afflatus/at-mineral.png"
-                    alt="Mineral"
-                    class="w-5 aspect-[3/5]"
-                  />
-                </template>
-                <template
-                  x-if={`character.afflatusType === '${AFFLATUS_TYPE.STAR}'`}
-                >
-                  <img
-                    src="/data/afflatus/at-star.png"
-                    alt="Star"
-                    class="w-5 aspect-[3/5]"
-                  />
-                </template>
-                <template
-                  x-if={`character.afflatusType === '${AFFLATUS_TYPE.PLANT}'`}
-                >
-                  <img
-                    src="/data/afflatus/at-plant.png"
-                    alt="Plant"
-                    class="w-5 aspect-[3/5]"
-                  />
-                </template>
-                <template
-                  x-if={`character.afflatusType === '${AFFLATUS_TYPE.BEAST}'`}
-                >
-                  <img
-                    src="/data/afflatus/at-beast.png"
-                    alt="Beast"
-                    class="w-5 aspect-[3/5]"
-                  />
-                </template>
-                <template
-                  x-if={`character.afflatusType === '${AFFLATUS_TYPE.SPIRIT}'`}
-                >
-                  <img
-                    src="/data/afflatus/at-spirit.png"
-                    alt="Spirit"
-                    class="w-5 aspect-[3/5]"
-                  />
-                </template>
-                <template
-                  x-if={`character.afflatusType === '${AFFLATUS_TYPE.INTELLECT}'`}
-                >
-                  <img
-                    src="/data/afflatus/at-intellect.png"
-                    alt="Intellect"
-                    class="w-5 aspect-[3/5]"
-                  />
-                </template>
-              </div>
+            <a href={"#"}>
+              <div class="card-body relative">
+                <div class="absolute top-0 left-0">
+                  <template
+                    x-if={`character.afflatusType === '${AFFLATUS_TYPE.MINERAL}'`}
+                  >
+                    <img
+                      src="/data/afflatus/at-mineral.png"
+                      alt="Mineral"
+                      class="w-5 aspect-[3/5]"
+                    />
+                  </template>
+                  <template
+                    x-if={`character.afflatusType === '${AFFLATUS_TYPE.STAR}'`}
+                  >
+                    <img
+                      src="/data/afflatus/at-star.png"
+                      alt="Star"
+                      class="w-5 aspect-[3/5]"
+                    />
+                  </template>
+                  <template
+                    x-if={`character.afflatusType === '${AFFLATUS_TYPE.PLANT}'`}
+                  >
+                    <img
+                      src="/data/afflatus/at-plant.png"
+                      alt="Plant"
+                      class="w-5 aspect-[3/5]"
+                    />
+                  </template>
+                  <template
+                    x-if={`character.afflatusType === '${AFFLATUS_TYPE.BEAST}'`}
+                  >
+                    <img
+                      src="/data/afflatus/at-beast.png"
+                      alt="Beast"
+                      class="w-5 aspect-[3/5]"
+                    />
+                  </template>
+                  <template
+                    x-if={`character.afflatusType === '${AFFLATUS_TYPE.SPIRIT}'`}
+                  >
+                    <img
+                      src="/data/afflatus/at-spirit.png"
+                      alt="Spirit"
+                      class="w-5 aspect-[3/5]"
+                    />
+                  </template>
+                  <template
+                    x-if={`character.afflatusType === '${AFFLATUS_TYPE.INTELLECT}'`}
+                  >
+                    <img
+                      src="/data/afflatus/at-intellect.png"
+                      alt="Intellect"
+                      class="w-5 aspect-[3/5]"
+                    />
+                  </template>
+                </div>
 
-              <span
-                class="absolute top-0 right-0 bg-primary-content text-white px-2"
-                x-text="character.version"></span>
-              <h2 class="card-title" x-text="character.title"></h2>
-            </div>
+                <span
+                  class="absolute top-0 right-0 bg-primary-content text-white px-2"
+                  x-text="character.version"></span>
+                <h2 class="card-title" x-text="character.title"></h2>
+              </div>
+            </a>
           </div>
         </li>
       </template>

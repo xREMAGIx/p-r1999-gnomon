@@ -12,20 +12,8 @@ import CardType from "@components/CardType.astro";
 import EffectTooltip from "@components/EffectTooltip.astro";
 import MarkdownHighlight from "@components/MarkdownHighlight.astro";
 import Material from "@components/Material.astro";
-import {
-  EnlightenmentEffect,
-  NumeralPerceptionEffect,
-  SturdinessEffect,
-  SupplementaryFormulaEffect,
-  CeremoniousEffect,
-} from "@content/effects/functions.mdx";
 import ResonateBoard from "@components/ResonateBoard.astro";
-import MarkdownParser from "@components/MarkdownParser.astro";
 import { EFFECTS } from "@data/effects";
-
-export const components = {
-  strong: MarkdownHighlight,
-};
 
 # 37
 
@@ -121,7 +109,7 @@ export const components = {
   </div>
   <CardInfo star={1} type="ATTACK" note="Such beautiful form.">
     Mass Attack. Deals **70%** Mental DMG plus (ATK x**40**%) Genesis DMG to 2
-    enemies. Gains 1 additional stack of <SturdinessEffect />.
+    enemies. Gains 1 additional stack of :effect{code="STURDINESS"}.
   </CardInfo>
   <CardInfo
     star={2}
@@ -129,7 +117,7 @@ export const components = {
     note="Such beautiful form. Desirable in dimensions and fractals."
   >
     Mass Attack. Deals **105%** Mental DMG plus (ATK x**60**%) Genesis DMG to 2
-    enemies. Gains 1 additional stack of <SturdinessEffect />.
+    enemies. Gains 1 additional stack of :effect{code="STURDINESS"}.
   </CardInfo>
   <CardInfo
     star={3}
@@ -137,7 +125,7 @@ export const components = {
     note="Such beautiful form. Desirable in dimensions and fractals — a truth agreed upon by all."
   >
     Mass Attack. Deals **175%** Mental DMG plus (ATK x**100**%) Genesis DMG to 2
-    enemies. Gains 1 additional stack of <SturdinessEffect />.
+    enemies. Gains 1 additional stack of :effect{code="STURDINESS"}.
   </CardInfo>
 </div>
 
@@ -154,8 +142,8 @@ export const components = {
     type="BUFF"
     note="It is the omega, the final answer, the result of all calculations."
   >
-    Mass Buff. Grants 2 stacks of <NumeralPerceptionEffect /> to all allies,
-    gains 2 stacks of <EnlightenmentEffect />, and gains Eureka +2.
+    Mass Buff. Grants 2 stacks of :effect{code = "NUMERAL_PERCEPTION"} to all allies,
+    gains 2 stacks of :effect{code = "ENLIGHTENMENT"}, and gains Eureka +2.
   </CardInfo>
 </div>
 
@@ -168,7 +156,7 @@ export const components = {
   ##### Insight 1
 </div>
 
-After using an Incantation, gains Eureka +1. After another ally takes an extra action, gains Eureka +1. When at 5 Eureka, consumes 5 Eureka to cast <SupplementaryFormulaEffect />. This attack is regarded as 1 follow-up attack and does not grant Eureka.
+After using an Incantation, gains Eureka +1. After another ally takes an extra action, gains Eureka +1. When at 5 Eureka, consumes 5 Eureka to cast :tooltip[Mass attack. Deals **120%** Mental DMG plus (ATK x**40%**) Genesis DMG to all enemies.]{title="[Supplementary Formula]"}. This attack is regarded as 1 follow-up attack and does not grant Eureka.
 
 <div class="mt-4 flex items-center">
   <div class="w-8 h-8 mr-2">![insight-2-icon](/data/insight/insight-2.png)</div>
@@ -189,18 +177,18 @@ When entering battle, Critical Rate <span class="highlight">+20%</span>. All Gen
 <span class="text-2xl mr-2">Lv. 1:</span> Calculation of Genesis: When entering
 battle, Critical Rate boost increased to **40%**.
 
-<span class="text-2xl mr-2">Lv. 2:</span> Calculation of Genesis: <NumeralPerceptionEffect />
+<span class="text-2xl mr-2">Lv. 2:</span> Calculation of Genesis: :effect{code = "NUMERAL_PERCEPTION"}
 's Mental DMG is increased to **180%**; additional Genesis DMG increased to
 (ATKx**60%**).
 
-<span class="text-2xl">Lv. 3:</span> Kingdom of Geometry: <EnlightenmentEffect /> increased
+<span class="text-2xl">Lv. 3:</span> Kingdom of Geometry: :effect{code = "ENLIGHTENMENT"} increased
 to **3** stacks; Eureka gained increased to **3**.
 
-<span class="text-2xl">Lv. 4:</span> Calculation of Genesis: <SupplementaryFormulaEffect />
+<span class="text-2xl">Lv. 4:</span> Calculation of Genesis: :tooltip[Mass attack. Deals **120%** Mental DMG plus (ATK x**40%**) Genesis DMG to all enemies.]{title="[Supplementary Formula]"}
 's Mental DMG is increased to **240%**; additional Genesis DMG increased to
 (ATKx**80%**).
 
-<span class="text-2xl">Lv. 5:</span> Kingdom of Geometry: <NumeralPerceptionEffect /> increased
+<span class="text-2xl">Lv. 5:</span> Kingdom of Geometry: :effect{code = "NUMERAL_PERCEPTION"} increased
 to **3** stacks; Eureka gained increased to **4**.
 
 ## Insight Materials
