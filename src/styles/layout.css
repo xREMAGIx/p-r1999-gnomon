@@ -21,7 +21,7 @@ table th {
 }
 
 h1 {
-  @apply text-6xl font-bold text-primary;
+  @apply text-6xl font-bold text-primary text-center my-10;
 }
 
 h2 {

@@ -20,6 +20,17 @@ export default {
 
         highlight: "#db6f39",
         gray: "#808080",
+
+        common: "#576d84",
+
+        syntony: "#597463",
+        abundance: "#9f844d",
+        craft: "#58537b",
+        ritual: "#4d212e",
+        ['extra-action']: "#795e4b",
+        resonance: "#5f7281",
+        voltaic: "#838554",
+        support: "#848887"
       },
       gridTemplateColumns: {
         filter: "auto 1fr",

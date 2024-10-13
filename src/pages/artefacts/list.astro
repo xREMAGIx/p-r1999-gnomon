@@ -2,6 +2,11 @@
 import EffectTooltip from "@components/EffectTooltip.astro";
 import MarkdownContent from "@components/MarkdownContent.astro";
 import MarkdownHighlight from "@components/MarkdownHighlight.astro";
+import {
+  ARTEFACTS_RARITY,
+  ARTEFACTS_TAG,
+  ARTEFACTS_TYPE,
+} from "@data/artefacts";
 import Layout from "@layouts/Layout.astro";
 import { getCollection } from "astro:content";
 
@@ -28,25 +33,116 @@ const artefactEntries = await getCollection("artefacts");
             </li>
           </template>
         </ul>
+
+        <div class="py-2 px-4">Type</div>
+        <ul class="py-2 px-4 flex gap-1">
+          <template x-for="type in types">
+            <li>
+              <button
+                class="btn btn-outline btn-xs"
+                :class="type === typeFilter ? 'btn-active' : ''"
+                @click="filterType(type)"
+                x-text="type"
+              >
+              </button>
+            </li>
+          </template>
+        </ul>
+
+        <div class="py-2 px-4">Tag</div>
+        <ul class="py-2 px-4 flex gap-1">
+          <template x-for="tag in tags">
+            <li>
+              <button
+                class="btn btn-outline btn-xs"
+                :class="tag === tagFilter ? 'btn-active' : ''"
+                @click="filterTag(tag)"
+                x-text="tag"
+              >
+              </button>
+            </li>
+          </template>
+        </ul>
       </div>
     </div>
 
-    <ul class="grid gap-4">
+    <ul class="mt-8 flex flex-col gap-6">
       {
         artefactEntries.map(async (artefactEntry) => {
           const { Content } = await artefactEntry.render();
 
           return (
-            <li class="grid grid-flow-col auto-cols-max gap-4">
-              <h5 class="min-w-40">{artefactEntry.data.name}</h5>
-              <Content
-                components={{
-                  p: MarkdownContent,
-                  strong: MarkdownHighlight,
-                  effect: EffectTooltip,
-                }}
-              />
-            </li>
+            <template
+              x-if={`rarityFilter === 'ALL' || rarityFilter === '${artefactEntry.data.rarity}'`}
+            >
+              <template
+                x-if={`typeFilter === 'ALL' || typeFilter === '${artefactEntry.data.type}'`}
+              >
+                <template
+                  x-if={`tagFilter === 'ALL' || '${artefactEntry.data.tags.join("-")}'.includes(tagFilter)`}>
+                >
+                  <li class="flex gap-4">
+                    <h5 class="min-w-40">{artefactEntry.data.name}</h5>
+                    <div>
+                      <span
+                        class:list={[
+                          "badge font-bold",
+                          {
+                            "text-common border-common":
+                              artefactEntry.data.rarity === "COMMON",
+                            "text-rare border-rare":
+                              artefactEntry.data.rarity === "RARE",
+                            "text-epic border-epic":
+                              artefactEntry.data.rarity === "EPIC",
+                          },
+                        ]}
+                      >
+                        {ARTEFACTS_RARITY[artefactEntry.data.rarity].title}
+                      </span>
+                      <span class="badge font-bold border-base-content">
+                        {ARTEFACTS_TYPE[artefactEntry.data.type].title}
+                      </span>
+                      <div class="mt-1">
+                        {artefactEntry.data.tags.map((tag) => (
+                          <span
+                            class:list={[
+                              "badge font-bold",
+                              {
+                                "border-support text-support":
+                                  tag === "SUPPORT",
+                                "border-ritual text-ritual": tag === "RITUAL",
+                                "border-craft text-craft": tag === "CRAFT",
+                                "border-syntony text-syntony":
+                                  tag === "SYNTONY",
+                                "border-resonance text-resonance":
+                                  tag === "RESONANCE",
+                                "border-abundance text-abundance":
+                                  tag === "ABUNDANCE",
+                                "border-extra-action text-extra-action":
+                                  tag === "EXTRA_ACTION",
+                                "border-voltaic text-voltaic":
+                                  tag === "VOLTAIC",
+                              },
+                            ]}
+                          >
+                            {ARTEFACTS_TAG[tag].title}
+                          </span>
+                        ))}
+                      </div>
+                      <div class="mt-2">
+                        <Content
+                          components={{
+                            p: MarkdownContent,
+                            strong: MarkdownHighlight,
+                            effect: EffectTooltip,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </li>
+                </template>
+              </template>
+            </template>
           );
         })
       }
@@ -55,17 +151,22 @@ const artefactEntries = await getCollection("artefacts");
 </Layout>
 
 <script>
-  import { ARTEFACTS_RARITY } from "@data/artefacts";
+  import {
+    ARTEFACTS_RARITY,
+    ARTEFACTS_TAG,
+    ARTEFACTS_TYPE,
+  } from "@data/artefacts";
   import Alpine from "alpinejs";
 
   window.Alpine = Alpine;
 
   Alpine.data("dataset", () => ({
-    rarityFilter: "all",
-    rarities: ["all", ...Object.values(ARTEFACTS_RARITY)],
-
-    artefactList: [],
-    artefacts: [],
+    rarityFilter: "ALL",
+    rarities: ["ALL", ...Object.keys(ARTEFACTS_RARITY)],
+    typeFilter: "ALL",
+    types: ["ALL", ...Object.keys(ARTEFACTS_TYPE)],
+    tagFilter: "ALL",
+    tags: ["ALL", ...Object.keys(ARTEFACTS_TAG)],
 
     initCharaters(artefactEntries) {
       this.artefacts = artefactEntries;
@@ -73,9 +174,14 @@ const artefactEntries = await getCollection("artefacts");
 
     filterRarity(rarity) {
       this.rarityFilter = rarity;
-      this.artefacts = this.artefactList.filter(
-        (char) => this.rarityFilter === "all" || char.rare === rarity
-      );
+    },
+
+    filterType(type) {
+      this.typeFilter = type;
+    },
+
+    filterTag(tag) {
+      this.tagFilter = tag;
     },
   }));
 </script>

@@ -1,9 +1,17 @@
-export const ARTEFACTS_TYPE = {
+export const ARTEFACTS_TYPES = {
   WEAPON: "Weapon",
   CURIO: "Curio",
   ACCESSORY: "Accessory",
   MEDICATION: "Medication",
   DISK: "Disk",
+};
+
+export const ARTEFACTS_TYPE = {
+  WEAPON: { title: "Weapon" },
+  CURIO: { title: "Curio" },
+  ACCESSORY: { title: "Accessory" },
+  MEDICATION: { title: "Medication" },
+  DISK: { title: "Disk" },
 };
 
 export const ARTEFACT_TAGS = {
@@ -17,18 +25,35 @@ export const ARTEFACT_TAGS = {
   VOLTAIC: "Voltaic",
 };
 
-export const ARTEFACTS_RARITY = {
+export const ARTEFACTS_TAG = {
+  SUPPORT: { title: "Support" },
+  RITUAL: { title: "Ritual" },
+  CRAFT: { title: "Craft" },
+  SYNTONY: { title: "Syntony" },
+  RESONANCE: { title: "Resonance" },
+  ABUNDANCE: { title: "Abundance" },
+  EXTRA_ACTION: { title: "Extra Action" },
+  VOLTAIC: { title: "Voltaic" },
+}
+
+export const ARTEFACTS_RARITIES = {
   COMMON: "Common",
   RARE: "Rare",
   EPIC: "Epic",
+};
+
+export const ARTEFACTS_RARITY = {
+  COMMON: { title: "Common", code: "common" },
+  RARE: { title: "Rare", code: "rare" },
+  EPIC: { title: "Epic", code: "epic" },
 };
 
 export const ARTEFACTS = {
   CRUDE_STAFF: {
     index: "1",
     name: "Crude Staff",
-    type: ARTEFACTS_TYPE.WEAPON,
-    rarity: ARTEFACTS_RARITY.COMMON,
+    type: ARTEFACTS_TYPES.WEAPON,
+    rarity: ARTEFACTS_RARITIES.COMMON,
     description:
       "Critical Rate **+5%**. Each Crude Staff within range grants an additional Critical Rate **+5%.**",
     shape: [[1, 1]],
@@ -37,8 +62,8 @@ export const ARTEFACTS = {
   WRYM_TOE: {
     index: "2",
     name: "Wrym Toe",
-    type: ARTEFACTS_TYPE.WEAPON,
-    rarity: ARTEFACTS_RARITY.COMMON,
+    type: ARTEFACTS_TYPES.WEAPON,
+    rarity: ARTEFACTS_RARITIES.COMMON,
     description:
       "When triggering Incantation Syntony, **50%** chance to inflict 2 stacks of [Gash] on all enemies for 1 round.",
     shape: [[1], [1]],
@@ -47,8 +72,8 @@ export const ARTEFACTS = {
   WOOL_SHEARS: {
     index: "3",
     name: "Wool Shears",
-    type: ARTEFACTS_TYPE.WEAPON,
-    rarity: ARTEFACTS_RARITY.COMMON,
+    type: ARTEFACTS_TYPES.WEAPON,
+    rarity: ARTEFACTS_RARITIES.COMMON,
     description:
       "Attacks have a **50%** chance to inflict an additional (held Goldfinch Coins *2) Genesis DMG, up to 2000.",
     shape: [[1, 1]],
@@ -57,8 +82,8 @@ export const ARTEFACTS = {
   GOLDEN_PIN: {
     index: "4",
     name: "Golden Pin",
-    type: ARTEFACTS_TYPE.WEAPON,
-    rarity: ARTEFACTS_RARITY.COMMON,
+    type: ARTEFACTS_TYPES.WEAPON,
+    rarity: ARTEFACTS_RARITIES.COMMON,
     description:
       "Can be tempered with Bloodthirsty Hammer. At the start of the round, for every 3 incantations in the Spelldock, grant 2 stacks of [Verve] to all allies.",
     shape: [[1], [1], [1]],
@@ -67,8 +92,8 @@ export const ARTEFACTS = {
   CROOKED_GUN: {
     index: "5",
     name: "Crooked Gun",
-    type: ARTEFACTS_TYPE.WEAPON,
-    rarity: ARTEFACTS_RARITY.COMMON,
+    type: ARTEFACTS_TYPES.WEAPON,
+    rarity: ARTEFACTS_RARITIES.COMMON,
     description:
       "Right after casting a 1-target Ultimate, **50%** chance to inflict [Blind] on the target for 1 round; **50%** chance to inflict [Mis-aim] on the target for 1 round.",
     shape: [[1, 1, 1]],
@@ -77,8 +102,8 @@ export const ARTEFACTS = {
   BONE_ARROW: {
     index: "6",
     name: "Bone Arrow",
-    type: ARTEFACTS_TYPE.WEAPON,
-    rarity: ARTEFACTS_RARITY.COMMON,
+    type: ARTEFACTS_TYPES.WEAPON,
+    rarity: ARTEFACTS_RARITIES.COMMON,
     description:
       "After launching a 1-target attack, deal (the attacker's ATK x**100%**) Genesis DMG to a random enemy.",
     shape: [
@@ -90,8 +115,8 @@ export const ARTEFACTS = {
   PICKFORK: {
     index: "7",
     name: "Pickfork",
-    type: ARTEFACTS_TYPE.WEAPON,
-    rarity: ARTEFACTS_RARITY.COMMON,
+    type: ARTEFACTS_TYPES.WEAPON,
+    rarity: ARTEFACTS_RARITIES.COMMON,
     description:
       "When attacking an enemy in [Neg Status], inflict [Bleed] on the target for 2 rounds.",
     shape: [
@@ -103,8 +128,8 @@ export const ARTEFACTS = {
   OLD_CRUTCH: {
     index: "8",
     name: "Old Crutch",
-    type: ARTEFACTS_TYPE.WEAPON,
-    rarity: ARTEFACTS_RARITY.COMMON,
+    type: ARTEFACTS_TYPES.WEAPON,
+    rarity: ARTEFACTS_RARITIES.COMMON,
     description:
       "After an ally takes an action, gain 5 stacks of [Ceremonious].",
     shape: [
@@ -116,8 +141,8 @@ export const ARTEFACTS = {
   SCARY_FORCEPS: {
     index: "9",
     name: "Scary Forceps",
-    type: ARTEFACTS_TYPE.WEAPON,
-    rarity: ARTEFACTS_RARITY.COMMON,
+    type: ARTEFACTS_TYPES.WEAPON,
+    rarity: ARTEFACTS_RARITIES.COMMON,
     description:
       "Can be tempered with Bloodthirsty Hammer. When casting a rank 2/3 incantation, DMG Bonus **+20%**.",
     shape: [
@@ -129,8 +154,8 @@ export const ARTEFACTS = {
   BEAR_PAW: {
     index: "10",
     name: "Bear Paw",
-    type: ARTEFACTS_TYPE.WEAPON,
-    rarity: ARTEFACTS_RARITY.COMMON,
+    type: ARTEFACTS_TYPES.WEAPON,
+    rarity: ARTEFACTS_RARITIES.COMMON,
     description:
       "After launching the first attack of each round, inflict 1 stack of [Gash] on the target for 2 rounds. If the attack is an extra action, **50%** chance to inflict another stack of [Gash] on the target for 2 rounds.",
     shape: [
