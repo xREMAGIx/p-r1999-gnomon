@@ -14,10 +14,17 @@ const artefactEntries = await getCollection("artefacts");
 ---
 
 <Layout title="Reverse 1999 Gnomon">
+  <div class="text-sm breadcrumbs">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li>Artefacts</li>
+    </ul>
+  </div>
+
   <h1>Artefact List</h1>
 
   <div x-data={"dataset"}>
-    <div class="filters">
+    <div class="filters sticky top-16 bg-base-100 p-2 z-10">
       <div class="grid grid-cols-filter">
         <div class="py-2 px-4">Rarity</div>
         <ul class="py-2 px-4 flex gap-1">
@@ -25,9 +32,9 @@ const artefactEntries = await getCollection("artefacts");
             <li>
               <button
                 class="btn btn-outline btn-xs"
-                :class="rarity === rarityFilter ? 'btn-active' : ''"
+                :class="rarity.code === rarityFilter ? 'btn-active' : ''"
                 @click="filterRarity(rarity)"
-                x-text="rarity"
+                x-text="rarity.title"
               >
               </button>
             </li>
@@ -40,9 +47,9 @@ const artefactEntries = await getCollection("artefacts");
             <li>
               <button
                 class="btn btn-outline btn-xs"
-                :class="type === typeFilter ? 'btn-active' : ''"
+                :class="type.code === typeFilter ? 'btn-active' : ''"
                 @click="filterType(type)"
-                x-text="type"
+                x-text="type.title"
               >
               </button>
             </li>
@@ -55,9 +62,9 @@ const artefactEntries = await getCollection("artefacts");
             <li>
               <button
                 class="btn btn-outline btn-xs"
-                :class="tag === tagFilter ? 'btn-active' : ''"
+                :class="tag.code === tagFilter ? 'btn-active' : ''"
                 @click="filterTag(tag)"
-                x-text="tag"
+                x-text="tag.title"
               >
               </button>
             </li>
@@ -79,8 +86,9 @@ const artefactEntries = await getCollection("artefacts");
                 x-if={`typeFilter === 'ALL' || typeFilter === '${artefactEntry.data.type}'`}
               >
                 <template
-                  x-if={`tagFilter === 'ALL' || '${artefactEntry.data.tags.join("-")}'.includes(tagFilter)`}>
+                  x-if={`tagFilter === 'ALL' || '${artefactEntry.data.tags.join("-")}'.includes(tagFilter)`}
                 >
+                  >
                   <li class="flex gap-4">
                     <h5 class="min-w-40">{artefactEntry.data.name}</h5>
                     <div>
@@ -162,26 +170,44 @@ const artefactEntries = await getCollection("artefacts");
 
   Alpine.data("dataset", () => ({
     rarityFilter: "ALL",
-    rarities: ["ALL", ...Object.keys(ARTEFACTS_RARITY)],
+    rarities: [
+      { title: "All", code: "ALL" },
+      ...Object.keys(ARTEFACTS_RARITY).map((code) => ({
+        title: ARTEFACTS_RARITY[code].title,
+        code,
+      })),
+    ],
     typeFilter: "ALL",
-    types: ["ALL", ...Object.keys(ARTEFACTS_TYPE)],
+    types: [
+      { title: "All", code: "ALL" },
+      ...Object.keys(ARTEFACTS_TYPE).map((code) => ({
+        title: ARTEFACTS_TYPE[code].title,
+        code,
+      })),
+    ],
     tagFilter: "ALL",
-    tags: ["ALL", ...Object.keys(ARTEFACTS_TAG)],
+    tags: [
+      { title: "All", code: "ALL" },
+      ...Object.keys(ARTEFACTS_TAG).map((code) => ({
+        title: ARTEFACTS_TAG[code].title,
+        code,
+      })),
+    ],
 
     initCharaters(artefactEntries) {
       this.artefacts = artefactEntries;
     },
 
     filterRarity(rarity) {
-      this.rarityFilter = rarity;
+      this.rarityFilter = rarity.code;
     },
 
     filterType(type) {
-      this.typeFilter = type;
+      this.typeFilter = type.code;
     },
 
     filterTag(tag) {
-      this.tagFilter = tag;
+      this.tagFilter = tag.code;
     },
   }));
 </script>

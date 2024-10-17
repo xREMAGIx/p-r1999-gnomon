@@ -1,9 +1,10 @@
 ---
+import "@styles/markdown-layout.css";
 import EffectTooltip from "@components/EffectTooltip.astro";
 import MarkdownContent from "@components/MarkdownContent.astro";
 import MarkdownHighlight from "@components/MarkdownHighlight.astro";
 import Tooltip from "@components/Tooltip.astro";
-import MarkdownLayout from "@layouts/MarkdownLayout.astro";
+import Layout from "@layouts/Layout.astro";
 import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
@@ -18,7 +19,7 @@ const { entry } = Astro.props;
 const { Content } = await entry.render();
 ---
 
-<MarkdownLayout title={`${entry.data.title} | Character`}>
+<Layout title={`${entry.data.title} | Character`}>
   <Content
     components={{
       p: MarkdownContent,
@@ -27,4 +28,4 @@ const { Content } = await entry.render();
       tooltip: Tooltip,
     }}
   />
-</MarkdownLayout>
+</Layout>

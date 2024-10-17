@@ -1,11 +1,27 @@
 ---
 import "@styles/layout.css";
+import Footer from "@layouts/Footer.astro";
 
 interface Props {
   title: string;
 }
 
 const { title } = Astro.props;
+
+const menu = [
+  {
+    title: "Home",
+    href: "/",
+  },
+  {
+    title: "Characters",
+    href: "/characters/list",
+  },
+  {
+    title: "Artefacts",
+    href: "/artefacts/list",
+  },
+];
 ---
 
 <!doctype html>
@@ -18,8 +34,72 @@ const { title } = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
-  <body class="container">
-    <slot />
+  <body>
+    <div class="drawer min-h-screen">
+      <input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content flex flex-col">
+        <!-- Navbar -->
+        <div
+          class="w-full navbar bg-base-300 h-16 sticky top-0 z-50 shadow-md shadow-primary"
+        >
+          <div class="flex-none lg:hidden">
+            <label
+              for="my-drawer-3"
+              aria-label="open sidebar"
+              class="btn btn-square btn-ghost"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                class="inline-block w-6 h-6 stroke-current"
+                ><path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"></path></svg
+              >
+            </label>
+          </div>
+          <div class="flex-1 px-2 mx-2">
+            <span class="text-primary text-xl font-bold"
+              >Reverse: 1999 Gnomon</span>
+          </div>
+          <div class="flex-none hidden lg:block">
+            <ul class="menu menu-horizontal py-1">
+              <!-- Navbar menu content here -->
+              {
+                menu.map((item) => (
+                  <li>
+                    <a href={item.href}>{item.title}</a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+        <main class="container flex-1 pt-6 pb-20">
+          <slot />
+        </main>
+        <Footer />
+      </div>
+      <div class="drawer-side">
+        <label
+          for="my-drawer-3"
+          aria-label="close sidebar"
+          class="drawer-overlay"></label>
+        <ul class="menu p-4 w-80 min-h-full bg-base-200">
+          <!-- Sidebar content here -->
+          {
+            menu.map((item) => (
+              <li>
+                <a href={item.href}>{item.title}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
   </body>
 </html>
 <style></style>

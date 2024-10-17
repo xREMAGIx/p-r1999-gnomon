@@ -37,11 +37,11 @@ h4 {
 }
 
 h5 {
-  @apply text-lg font-bold;
+  @apply text-lg font-bold my-2;
 }
 
 h6 {
-  @apply font-bold;
+  @apply font-bold my-2;
 }
 
 .container {
