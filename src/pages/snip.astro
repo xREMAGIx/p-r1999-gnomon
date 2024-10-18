@@ -1,0 +1,493 @@
+<!doctype html>
+<html>
+  <head> </head>
+  <body>
+    <div class="container" x-data="dataset">
+      <h1>Snip</h1>
+      <h2>Capture screen</h2>
+      <div class="camera">
+        <video
+          id="video"
+          class="video"
+          x-ref="video"
+          autoplay
+          @play="videoOnLoad"
+        >
+        </video>
+        <canvas
+          class="canvas"
+          id="cv1"
+          x-ref="canvas"
+          @click="initCanvas"
+          @mousedown="mouseDownOnCanvas"
+          @mousemove="mouseMoveOnCanvas"
+          @mouseup="mouseUpOnCanvas"></canvas>
+      </div>
+      <button class="btn btn-primary text-white" @click="reset">Reset</button>
+      <div id="hint" style="margin-top: 10px">
+        Draw on the stream above to select the text area.
+      </div>
+      <div class="process-wrapper">
+        <div class="process-image">
+          <h2>Image</h2>
+          <div class="image">
+            <img id="my_img" class="image" x-ref="captureImg" />
+          </div>
+        </div>
+        <div class="process-result">
+          <h2>Result</h2>
+          <div class="results" id="output" x-ref="output"></div>
+        </div>
+      </div>
+      <h2>Options</h2>
+      <div class="options">
+        <label for="automode">
+          <input
+            type="checkbox"
+            id="automode"
+            name="automode"
+            checked="isAutoMode"
+            @click="toggleAutoMode"
+          />
+          Auto Mode
+        </label>
+        <label for="showArea">
+          <input
+            type="checkbox"
+            id="showArea"
+            name="showArea"
+            checked="isShowArea"
+            @click="toggleShowArea"
+          />
+          Show Area
+        </label>
+        <label for="preprocess">
+          <input
+            type="checkbox"
+            id="preprocess"
+            name="preprocess"
+            checked="isPreprocess"
+            @click="togglePreprocess"
+          />
+          Preprocess Image
+        </label>
+        <label for="showImage">
+          <input
+            type="checkbox"
+            id="showImage"
+            name="showImage"
+            checked="isShowImage"
+            @click="toggleShowImage"
+          />
+          Show Image
+        </label>
+        <label for="dilate">
+          <input
+            type="checkbox"
+            id="dilate"
+            name="dilate"
+            checked="isDilate"
+            @click="toggleDilate"
+          />
+          Dilate
+        </label>
+        <label for="invertColor">
+          <input
+            type="checkbox"
+            id="invertColor"
+            name="invertColor"
+            checked="isInvertColor"
+            @click="toggleInvertColor"
+          />
+          Invert color
+        </label>
+        <label for="binarize">
+          <input
+            type="checkbox"
+            id="binarize"
+            name="binarize"
+            checked="isBinarize"
+            @click="toggleBinarize"
+          />
+          Binarize
+        </label>
+        <label for="blurImageRadius">
+          <span class="blurSliderLabel"
+            >Gaussian Blur <span x-text="blurImageRadius / 100"></span>
+          </span>
+          <input
+            id="blurImageRadius"
+            type="range"
+            min="0"
+            max="100"
+            :value="blurImageRadius"
+            @change="updateBlurImageRadius"
+            @input="onChangeBlurImageRadius"
+          />
+        </label>
+        <label for="binarizeThreshold">
+          <span class="blurSliderLabel"
+            >Binarize Threshold <span x-text="binarizeThreshold / 100"></span>
+          </span>
+          <input
+            id="binarizeThreshold"
+            type="range"
+            min="0"
+            max="100"
+            :value="binarizeThreshold"
+            @change="updateBinarizeThreshold"
+            @input="onChangeBinarizeThreshold"
+          />
+        </label>
+      </div>
+    </div>
+  </body>
+</html>
+
+<style>
+  h1 {
+    @apply text-4xl font-bold text-primary;
+  }
+
+  h2 {
+    @apply text-primary-content text-2xl font-bold pt-2;
+  }
+  .camera {
+    @apply relative basis-2/3;
+  }
+  .video {
+    @apply w-full min-h-60;
+  }
+  .canvas {
+    @apply absolute top-0 left-0 w-full h-full z-10 cursor-pointer border border-primary-content;
+  }
+  .options {
+    @apply p-2 border border-primary-content grid grid-cols-3 gap-2;
+  }
+  .results {
+    @apply p-2 border border-primary-content flex-1 overflow-auto;
+  }
+  .process-wrapper {
+    @apply flex items-stretch min-h-60;
+  }
+  .process-image {
+    @apply flex-1 flex flex-col;
+  }
+  .process-result {
+    @apply flex-1 flex flex-col;
+  }
+  .image {
+    @apply flex-1 border border-primary-content;
+  }
+</style>
+
+<script>
+  import {
+    blurARGB,
+    dilate,
+    invertColors,
+    thresholdFilter,
+  } from "@scripts/image-processing";
+  import Alpine from "alpinejs";
+  import { createWorker } from "tesseract.js";
+
+  window.Alpine = Alpine;
+
+  Alpine.data("dataset", () => ({
+    videoLoaded: false,
+    lastMouseY: 0,
+    lastMouseX: 0,
+    canvasX: 0,
+    canvasY: 0,
+    mouseX: 0,
+    mouseY: 0,
+    mouseDown: false,
+    rect: {},
+    imageData: null,
+    //* Elements
+    video: null,
+    canvas: null,
+    output: null,
+    captureImg: null,
+    ctx: null,
+    //* Options
+    isAutoMode: true,
+    isPreprocess: false,
+    isShowImage: true,
+    isShowArea: true,
+    isDilate: true,
+    isInvertColor: true,
+    isBinarize: true,
+    blurImageRadius: 0,
+    binarizeThreshold: 50,
+
+    init() {
+      this.video = this.$refs.video;
+      this.canvas = this.$refs.canvas;
+      this.output = this.$refs.output;
+      this.captureImg = this.$refs.captureImg;
+      this.canvasX = this.$refs.canvas.getBoundingClientRect().left;
+      this.canvasY = this.$refs.canvas.getBoundingClientRect().top;
+      this.ctx = this.$refs.canvas.getContext("2d");
+    },
+
+    reset() {
+      this.videoLoaded = false;
+      this.lastMouseY = 0;
+      this.lastMouseX = 0;
+      this.canvasX = 0;
+      this.canvasY = 0;
+      this.mouseX = 0;
+      this.mouseY = 0;
+      this.mouseDown = false;
+      this.rect = {};
+      this.imageData = null;
+      this.video.srcObject = null;
+
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    },
+
+    async startCapture() {
+      try {
+        this.video.srcObject = await navigator.mediaDevices.getDisplayMedia({
+          video: {
+            // cursor: "always",
+          },
+          audio: false,
+        });
+      } catch (err) {
+        console.error("Error" + err);
+      }
+    },
+
+    initCanvas() {
+      if (!this.videoLoaded) {
+        this.startCapture();
+      }
+    },
+
+    resizeCanvas(element) {
+      this.canvas.width = element.offsetWidth;
+      this.canvas.height = element.offsetHeight;
+
+      this.canvasX = this.canvas.getBoundingClientRect().left;
+      this.canvasY = this.canvas.getBoundingClientRect().top;
+    },
+
+    videoOnLoad(e) {
+      this.videoLoaded = true;
+      this.resizeCanvas(e.target);
+    },
+
+    recognizeImage(img) {
+      (async () => {
+        const worker = await createWorker("eng");
+
+        await worker.setParameters({ preserve_interword_spaces: "1" });
+        const {
+          data: { text },
+        } = await worker.recognize(img);
+        // writeIntoHtml("Result: " + text);
+        this.output.innerHTML = text;
+        await worker.terminate();
+      })();
+    },
+
+    preprocessImage(canvas) {
+      const processedImageData = canvas
+        .getContext("2d")
+        .getImageData(0, 0, canvas.width, canvas.height);
+
+      if (this.blurImageRadius > 0) {
+        blurARGB(processedImageData.data, canvas, this.blurImageRadius / 100);
+      }
+
+      if (this.isDilate) {
+        dilate(processedImageData.data, canvas);
+      }
+
+      if (this.isInvertColor) {
+        invertColors(processedImageData.data);
+      }
+
+      if (this.isBinarize) {
+        thresholdFilter(processedImageData.data, this.binarizeThreshold / 100);
+      }
+      return processedImageData;
+    },
+
+    renderPreprocessedImage() {
+      const { width, height, x, y } = this.rect;
+      const aspectRatioY = this.video.videoHeight / this.canvas.height;
+      const aspectRatioX = this.video.videoWidth / this.canvas.width;
+
+      const offsetY = 0.5 * aspectRatioY;
+
+      let cv2 = document.createElement("canvas");
+      cv2.width = width * aspectRatioX;
+      cv2.height = height * aspectRatioY;
+      let ctx2 = cv2.getContext("2d");
+      if (!ctx2) return;
+
+      ctx2.drawImage(
+        this.video,
+        x * aspectRatioX,
+        (y + offsetY) * aspectRatioY,
+        width * aspectRatioX,
+        (height - offsetY) * aspectRatioY,
+        0,
+        0,
+        cv2.width,
+        cv2.height
+      );
+
+      if (this.isPreprocess) {
+        ctx2.putImageData(this.preprocessImage(cv2), 0, 0);
+      }
+      this.imageData = cv2.toDataURL("image/jpg");
+      if (this.isShowImage) {
+        this.captureImg.hidden = false;
+        this.captureImg.src = this.imageData;
+      } else {
+        this.captureImg.hidden = true;
+      }
+    },
+
+    updatePreprocessedImage() {
+      this.renderPreprocessedImage();
+      this.recognizeImage(this.imageData);
+    },
+
+    showLoadingOCR() {
+      this.output.innerHTML = "Extracting text...";
+    },
+
+    mouseDownOnCanvas(e) {
+      this.lastMouseX = e.clientX - this.canvasX;
+      this.lastMouseY = e.clientY - this.canvasY;
+      this.mouseDown = true;
+    },
+
+    mouseMoveOnCanvas(e) {
+      this.mouseX = e.clientX - this.canvasX;
+      this.mouseY = e.clientY - this.canvasY;
+
+      if (this.mouseDown) {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); //clear canvas
+        this.ctx.beginPath();
+        let width = this.mouseX - this.lastMouseX;
+        let height = this.mouseY - this.lastMouseY;
+        this.ctx.rect(this.lastMouseX, this.lastMouseY, width, height);
+        this.rect = { x: this.lastMouseX, y: this.lastMouseY, width, height };
+        this.ctx.strokeStyle = "red";
+        this.ctx.lineWidth = 2;
+        this.ctx.stroke();
+      }
+    },
+
+    mouseUpOnCanvas() {
+      this.mouseDown = false;
+
+      if (this.rect.width > 0) {
+        if (this.isAutoMode) {
+          let automodeIntevalId;
+
+          this.showLoadingOCR();
+          automodeIntevalId = setInterval(this.updatePreprocessedImage(), 500);
+
+          setTimeout(() => {
+            clearInterval(automodeIntevalId);
+          }, 700);
+        } else {
+          this.showLoadingOCR();
+          this.updatePreprocessedImage();
+          this.hint.innerHTML = "Click on stream to refresh.";
+        }
+      }
+    },
+
+    toggleAutoMode() {
+      this.isAutoMode = !this.isAutoMode;
+      let automodeIntevalId;
+      if (this.isAutoMode) {
+        automodeIntevalId = setInterval(this.updatePreprocessedImage(), 500);
+      } else {
+        clearInterval(automodeIntevalId);
+      }
+    },
+
+    toggleShowImage() {
+      this.isShowImage = !this.isShowImage;
+      if (this.isShowImage) {
+        this.captureImg.hidden = false;
+        this.captureImg.src = this.imageData;
+      } else {
+        this.captureImg.hidden = true;
+      }
+    },
+
+    togglePreprocess() {
+      this.isPreprocess = !this.isPreprocess;
+      let preprocessIntevelId;
+      if (this.isPreprocess) {
+        preprocessIntevelId = setInterval(this.updatePreprocessedImage(), 500);
+      } else {
+        clearInterval(preprocessIntevelId);
+      }
+    },
+
+    toggleShowArea() {
+      this.isShowArea = !this.isShowArea;
+      if (this.isShowArea) {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); //clear canvas
+        this.ctx.beginPath();
+        this.ctx.rect(
+          this.rect.x,
+          this.rect.y,
+          this.rect.width,
+          this.rect.height
+        );
+        this.ctx.strokeStyle = "red";
+        this.ctx.lineWidth = 2;
+        this.ctx.stroke();
+      } else if (this.rect.width > 0) {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); //clear canvas
+      }
+    },
+
+    toggleDilate() {
+      this.isDilate = !this.isDilate;
+      this.updatePreprocessedImage();
+    },
+
+    toggleInvertColor() {
+      this.isInvertColor = !this.isInvertColor;
+      this.updatePreprocessedImage();
+    },
+
+    toggleBinarize() {
+      this.isBinarize = !this.isBinarize;
+      this.updatePreprocessedImage();
+    },
+
+    onChangeBlurImageRadius(e) {
+      this.blurImageRadius = parseInt(e.target.value, 10);
+      this.renderPreprocessedImage();
+    },
+
+    updateBlurImageRadius(e) {
+      this.blurImageRadius = parseInt(e.target.value, 10);
+      this.updatePreprocessedImage();
+    },
+
+    onChangeBinarizeThreshold(e) {
+      this.binarizeThreshold = parseInt(e.target.value, 10);
+      this.renderPreprocessedImage();
+    },
+
+    updateBinarizeThreshold(e) {
+      this.binarizeThreshold = parseInt(e.target.value, 10);
+      this.updatePreprocessedImage();
+    },
+  }));
+</script>

@@ -1,0 +1,24 @@
+---
+import {CARD_TYPE} from "@config/constants";
+
+interface Props {
+	type: keyof typeof CARD_TYPE;
+}
+
+const { type } = Astro.props;
+---
+
+<div class="pt-4 max-w-32 mx-auto">
+    {(()=>{
+        switch (type) {
+            case 'BUFF':
+                return (
+                    <img src="/data/card/attr-buff.png" alt="attr-buff icon"/>
+                )
+            default:
+                return (
+                    <img src="/data/card/attr-attack.png" alt="attr-attack icon"/>
+                )
+        }
+    })()}
+</ul>

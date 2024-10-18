@@ -1,0 +1,50 @@
+---
+interface Props {
+	star: number;
+}
+
+const { star } = Astro.props;
+---
+
+<ul class="flex justify-center gap-1">
+    {(()=>{
+        switch (star) {
+            case 2:
+                return (
+                    <li>
+                        <img class="w-8 h-8" src="/data/card/lv-star.png" alt="lv-star icon"/>
+                    </li>
+                    <li>
+                        <img class="w-8 h-8" src="/data/card/lv-star.png" alt="lv-star icon" />
+                    </li>
+                    <li>
+                        <img class="w-8 h-8" src="/data/card/lv-unstar.png" alt="lv-unstar icon" />
+                    </li>
+                )
+            case 3:
+                return (
+                    <li>
+                        <img class="w-8 h-8" src="/data/card/lv-star.png" alt="lv-star icon"/>
+                    </li>
+                    <li>
+                        <img class="w-8 h-8" src="/data/card/lv-star.png" alt="lv-star icon" />
+                    </li>
+                    <li>
+                        <img class="w-8 h-8" src="/data/card/lv-star.png" alt="lv-star icon" />
+                    </li>
+                )
+            default:
+                return (
+                        <li>
+                            <img class="w-8 h-8" src="/data/card/lv-star.png" alt="lv-star icon"/>
+                        </li>
+                        <li>
+                            <img class="w-8 h-8" src="/data/card/lv-unstar.png" alt="lv-unstar icon" />
+                        </li>
+                        <li>
+                            <img class="w-8 h-8" src="/data/card/lv-unstar.png" alt="lv-unstar icon" />
+                        </li>
+                    )
+        }
+    })()}
+</ul>
