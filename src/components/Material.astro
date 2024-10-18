@@ -1,13 +1,25 @@
 ---
 import { MATERIALS, type Material } from "@data/materials";
+import { getCollection } from "astro:content";
 
 interface Props {
-  type: Material;
+  code: string;
   variant: "small" | "medium" | "large";
   require?: number;
 }
 
-const { type, variant = "medium", require } = Astro.props;
+const { code, variant = "medium", require } = Astro.props;
+
+const materialEntries = await getCollection("materials");
+
+const materials = materialEntries.reduce((prev, curr) => {
+  return {
+    ...prev,
+    [curr.data.code]: curr,
+  };
+}, {});
+
+const material = materials[code];
 ---
 
 <div class="flex justify-between items-center">
@@ -23,8 +35,8 @@ const { type, variant = "medium", require } = Astro.props;
       <div>
         <img
           class="w-full h-full"
-          src={`/data/materials/bg-rare-${MATERIALS[type].RARE}.png`}
-          alt={`material ${MATERIALS[type].RARE}`}
+          src={`/data/materials/bg-rare-${material.data.rare}.png`}
+          alt={`material ${material.data.rare}`}
         />
       </div>
       <div
@@ -36,13 +48,13 @@ const { type, variant = "medium", require } = Astro.props;
         ]}
       >
         <img
-          src={`/data/materials/${MATERIALS[type].ID}.png`}
-          alt={`material ${MATERIALS[type].ID}`}
+          src={`/data/materials/${material.data.image}`}
+          alt={`material ${material.data.title}`}
         />
       </div>
     </div>
-    <a class="text-sm font-medium" href={`/materials/${MATERIALS[type].SLUG}`}>
-      {MATERIALS[type].NAME}
+    <a class="text-sm font-medium" href={`/materials/${material.slug}`}>
+      {material.data.title}
     </a>
   </di>
 

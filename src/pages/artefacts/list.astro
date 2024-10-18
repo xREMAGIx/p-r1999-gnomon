@@ -75,7 +75,7 @@ const artefactEntries = await getCollection("artefacts");
 
     <ul class="mt-8 flex flex-col gap-6">
       {
-        artefactEntries.map(async (artefactEntry) => {
+        artefactEntries.sort((a, b) => a.data.index - b.data.index).map(async (artefactEntry) => {
           const { Content } = await artefactEntry.render();
 
           return (
@@ -90,7 +90,14 @@ const artefactEntries = await getCollection("artefacts");
                 >
                   >
                   <li class="flex gap-4">
-                    <h5 class="min-w-40">{artefactEntry.data.name}</h5>
+                    <div>
+                      <h5 class="min-w-40">{artefactEntry.data.name}</h5>
+                      <img
+                        class="w-20 h-20"
+                        src={`/data/rouge/artefacts/${artefactEntry.data.image}`}
+                        alt={`artefact ${artefactEntry.slug}`}
+                      />
+                    </div>
                     <div>
                       <span
                         class:list={[

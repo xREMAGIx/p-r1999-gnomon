@@ -6,6 +6,7 @@ import MarkdownHighlight from "@components/MarkdownHighlight.astro";
 import Tooltip from "@components/Tooltip.astro";
 import Layout from "@layouts/Layout.astro";
 import { getCollection } from "astro:content";
+import Material from "@components/Material.astro";
 
 export async function getStaticPaths() {
   const characterEntries = await getCollection("characters");
@@ -26,6 +27,7 @@ const { Content } = await entry.render();
       effect: EffectTooltip,
       strong: MarkdownHighlight,
       tooltip: Tooltip,
+      material: Material,
     }}
   />
 </Layout>
