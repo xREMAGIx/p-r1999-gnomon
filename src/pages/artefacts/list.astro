@@ -75,91 +75,84 @@ const artefactEntries = await getCollection("artefacts");
 
     <ul class="mt-8 flex flex-col gap-6">
       {
-        artefactEntries.sort((a, b) => a.data.index - b.data.index).map(async (artefactEntry) => {
-          const { Content } = await artefactEntry.render();
+        artefactEntries
+          .sort((a, b) => a.data.index - b.data.index)
+          .map(async (artefactEntry) => {
+            const { Content } = await artefactEntry.render();
 
-          return (
-            <template
-              x-if={`rarityFilter === 'ALL' || rarityFilter === '${artefactEntry.data.rarity}'`}
-            >
-              <template
-                x-if={`typeFilter === 'ALL' || typeFilter === '${artefactEntry.data.type}'`}
+            return (
+              <li
+                class="flex gap-4"
+                x-show={`filterArtefact({
+                        rarity: '${artefactEntry.data.rarity}',
+                        type: '${artefactEntry.data.type}',
+                        tags: '${artefactEntry.data.tags}'
+                      })`}
               >
-                <template
-                  x-if={`tagFilter === 'ALL' || '${artefactEntry.data.tags.join("-")}'.includes(tagFilter)`}
-                >
+                <div>
+                  <h5 class="min-w-40">{artefactEntry.data.name}</h5>
+                  <img
+                    class="w-20 h-20"
+                    src={`/data/rouge/artefacts/${artefactEntry.data.image}`}
+                    alt={`artefact ${artefactEntry.slug}`}
+                  />
+                </div>
+                <div>
+                  <span
+                    class:list={[
+                      "badge font-bold",
+                      {
+                        "text-common border-common":
+                          artefactEntry.data.rarity === "COMMON",
+                        "text-rare border-rare":
+                          artefactEntry.data.rarity === "RARE",
+                        "text-epic border-epic":
+                          artefactEntry.data.rarity === "EPIC",
+                      },
+                    ]}
                   >
-                  <li class="flex gap-4">
-                    <div>
-                      <h5 class="min-w-40">{artefactEntry.data.name}</h5>
-                      <img
-                        class="w-20 h-20"
-                        src={`/data/rouge/artefacts/${artefactEntry.data.image}`}
-                        alt={`artefact ${artefactEntry.slug}`}
-                      />
-                    </div>
-                    <div>
+                    {ARTEFACTS_RARITY[artefactEntry.data.rarity].title}
+                  </span>
+                  <span class="badge font-bold border-base-content">
+                    {ARTEFACTS_TYPE[artefactEntry.data.type].title}
+                  </span>
+                  <div class="mt-1">
+                    {artefactEntry.data.tags.map((tag) => (
                       <span
                         class:list={[
                           "badge font-bold",
                           {
-                            "text-common border-common":
-                              artefactEntry.data.rarity === "COMMON",
-                            "text-rare border-rare":
-                              artefactEntry.data.rarity === "RARE",
-                            "text-epic border-epic":
-                              artefactEntry.data.rarity === "EPIC",
+                            "border-support text-support": tag === "SUPPORT",
+                            "border-ritual text-ritual": tag === "RITUAL",
+                            "border-craft text-craft": tag === "CRAFT",
+                            "border-syntony text-syntony": tag === "SYNTONY",
+                            "border-resonance text-resonance":
+                              tag === "RESONANCE",
+                            "border-abundance text-abundance":
+                              tag === "ABUNDANCE",
+                            "border-extra-action text-extra-action":
+                              tag === "EXTRA_ACTION",
+                            "border-voltaic text-voltaic": tag === "VOLTAIC",
                           },
                         ]}
                       >
-                        {ARTEFACTS_RARITY[artefactEntry.data.rarity].title}
+                        {ARTEFACTS_TAG[tag].title}
                       </span>
-                      <span class="badge font-bold border-base-content">
-                        {ARTEFACTS_TYPE[artefactEntry.data.type].title}
-                      </span>
-                      <div class="mt-1">
-                        {artefactEntry.data.tags.map((tag) => (
-                          <span
-                            class:list={[
-                              "badge font-bold",
-                              {
-                                "border-support text-support":
-                                  tag === "SUPPORT",
-                                "border-ritual text-ritual": tag === "RITUAL",
-                                "border-craft text-craft": tag === "CRAFT",
-                                "border-syntony text-syntony":
-                                  tag === "SYNTONY",
-                                "border-resonance text-resonance":
-                                  tag === "RESONANCE",
-                                "border-abundance text-abundance":
-                                  tag === "ABUNDANCE",
-                                "border-extra-action text-extra-action":
-                                  tag === "EXTRA_ACTION",
-                                "border-voltaic text-voltaic":
-                                  tag === "VOLTAIC",
-                              },
-                            ]}
-                          >
-                            {ARTEFACTS_TAG[tag].title}
-                          </span>
-                        ))}
-                      </div>
-                      <div class="mt-2">
-                        <Content
-                          components={{
-                            p: MarkdownContent,
-                            strong: MarkdownHighlight,
-                            effect: EffectTooltip,
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </li>
-                </template>
-              </template>
-            </template>
-          );
-        })
+                    ))}
+                  </div>
+                  <div class="mt-2">
+                    <Content
+                      components={{
+                        p: MarkdownContent,
+                        strong: MarkdownHighlight,
+                        effect: EffectTooltip,
+                      }}
+                    />
+                  </div>
+                </div>
+              </li>
+            );
+          })
       }
     </ul>
   </div>
@@ -201,8 +194,10 @@ const artefactEntries = await getCollection("artefacts");
       })),
     ],
 
-    initCharaters(artefactEntries) {
-      this.artefacts = artefactEntries;
+    filterArtefact({ rarity, type, tags }) {
+      return (this.rarityFilter === "ALL" || this.rarityFilter === rarity) &&
+        (this.typeFilter === "ALL" || this.typeFilter === type) &&
+        (this.tagFilter === "ALL" ||  tags.includes(this.tagFilter));
     },
 
     filterRarity(rarity) {

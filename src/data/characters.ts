@@ -1,5 +1,3 @@
-import { CHARACTERS_ID, RARITY, VERSION } from "@config/constants";
-
 export const CARD_TYPE = {
   ATTACK: "attack",
   DEBUFF: "debuff",
@@ -7,15 +5,6 @@ export const CARD_TYPE = {
   BUFF: "buff",
   CHANNEL: "channel",
   COUNTER: "counter",
-};
-
-export const AFFLATUS_TYPES = {
-  MINERAL: "mineral",
-  STAR: "star",
-  PLANT: "plant",
-  BEAST: "beast",
-  SPIRIT: "spirit",
-  INTELLECT: "intellect",
 };
 
 export const AFFLATUS_TYPE = {
@@ -51,11 +40,6 @@ export const AFFLATUS_TYPE = {
   },
 };
 
-export const DMG_TYPES = {
-  REALITY: "reality",
-  MENTAL: "mental",
-};
-
 export const DMG_TYPE = {
   REALITY: {
     title: "Reality",
@@ -65,12 +49,6 @@ export const DMG_TYPE = {
     title: "Mental",
     assetCode: "mental",
   },
-};
-
-export const SPECIALTIES = {
-  DPS: "dps",
-  SUPPORT: "support",
-  FOLLOW_UP_ATTACK: "Follow-up Attack",
 };
 
 export const SPECIALTY = {
@@ -85,41 +63,21 @@ export const SPECIALTY = {
   },
 };
 
-export const CHARACTERS = [
-  {
-    id: CHARACTERS_ID.ISOLDE,
-    title: "Isolde",
-    rare: RARITY.SIX_STAR,
-    afflatusType: AFFLATUS_TYPES.SPIRIT,
-    dmgType: DMG_TYPES.MENTAL,
-    isLimited: false,
-    version: VERSION.V1_7,
+export const RARITY = {
+  SIX_STAR: {
+    title: "6 star",
+    value: 6,
   },
-  {
-    id: CHARACTERS_ID[37],
-    title: "Thirty Seven",
-    rare: RARITY.SIX_STAR,
-    afflatusType: AFFLATUS_TYPES.STAR,
-    dmgType: DMG_TYPES.MENTAL,
-    isLimited: false,
-    version: VERSION.V1_2,
+  FIVE_STAR: {
+    title: "5 star",
+    value: 5,
   },
-  {
-    id: CHARACTERS_ID.MATILDA,
-    title: "Matilda",
-    rare: RARITY.FIVE_STAR,
-    afflatusType: AFFLATUS_TYPES.STAR,
-    dmgType: DMG_TYPES.MENTAL,
-    isLimited: false,
-    version: VERSION.V1_0,
+  FOUR_STAR: {
+    title: "4 star",
+    value: 4,
   },
-  {
-    id: CHARACTERS_ID.SONETTO,
-    title: "Sonetto",
-    rare: RARITY.FIVE_STAR,
-    afflatusType: AFFLATUS_TYPES.MINERAL,
-    dmgType: DMG_TYPES.REALITY,
-    isLimited: false,
-    version: VERSION.V1_0,
-  },
-];
+  THREE_STAR: {
+    title: "3 star",
+    value: 3,
+  }
+};

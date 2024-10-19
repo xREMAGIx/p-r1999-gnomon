@@ -1,6 +1,9 @@
 ---
-import { AFFLATUS_TYPE } from "@config/constants";
+import AfflatusIcon from "@components/AfflatusIcon.astro";
 import Layout from "@layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const characterEntries = await getCollection("characters");
 ---
 
 <Layout title="Reverse 1999 Gnomon">
@@ -22,24 +25,24 @@ import Layout from "@layouts/Layout.astro";
             <li>
               <button
                 class="btn btn-outline btn-xs"
-                :class="rarity === rarityFilter ? 'btn-active' : ''"
+                :class="rarity.code === rarityFilter ? 'btn-active' : ''"
                 @click="filterRarity(rarity)"
-                x-text="rarity"
+                x-text="rarity.title"
               >
               </button>
             </li>
           </template>
         </ul>
 
-        <div class="py-2 px-4">Element type</div>
+        <div class="py-2 px-4">Afflatus</div>
         <ul class="py-2 px-4 flex gap-1">
           <template x-for="afflatusType in afflatusTypes">
             <li>
               <button
                 class="btn btn-outline btn-xs"
-                :class="afflatusType === afflatusTypeFilter ? 'btn-active' : ''"
+                :class="afflatusType.code === afflatusTypeFilter ? 'btn-active' : ''"
                 @click="filterElementType(afflatusType)"
-                x-text="afflatusType"
+                x-text="afflatusType.title"
               >
               </button>
             </li>
@@ -52,9 +55,9 @@ import Layout from "@layouts/Layout.astro";
             <li>
               <button
                 class="btn btn-outline btn-xs"
-                :class="dmgType === dmgTypeFilter ? 'btn-active' : ''"
+                :class="dmgType.code === dmgTypeFilter ? 'btn-active' : ''"
                 @click="filterDmgType(dmgType)"
-                x-text="dmgType"
+                x-text="dmgType.title"
               >
               </button>
             </li>
@@ -64,126 +67,96 @@ import Layout from "@layouts/Layout.astro";
     </div>
 
     <ul class="mt-8 grid grid-cols-6 gap-4">
-      <template x-for="character in characters" :key="character.id">
-        <li>
-          <div
-            class="card card-compact bg-base-100 h-64 border-base-content border shadow-xl"
-          >
-            <a href={"#"}>
-              <div class="card-body relative">
-                <div class="absolute top-0 left-0">
-                  <template
-                    x-if={`character.afflatusType === '${AFFLATUS_TYPE.MINERAL}'`}
-                  >
-                    <img
-                      src="/data/afflatus/at-mineral.png"
-                      alt="Mineral"
-                      class="w-5 aspect-[3/5]"
-                    />
-                  </template>
-                  <template
-                    x-if={`character.afflatusType === '${AFFLATUS_TYPE.STAR}'`}
-                  >
-                    <img
-                      src="/data/afflatus/at-star.png"
-                      alt="Star"
-                      class="w-5 aspect-[3/5]"
-                    />
-                  </template>
-                  <template
-                    x-if={`character.afflatusType === '${AFFLATUS_TYPE.PLANT}'`}
-                  >
-                    <img
-                      src="/data/afflatus/at-plant.png"
-                      alt="Plant"
-                      class="w-5 aspect-[3/5]"
-                    />
-                  </template>
-                  <template
-                    x-if={`character.afflatusType === '${AFFLATUS_TYPE.BEAST}'`}
-                  >
-                    <img
-                      src="/data/afflatus/at-beast.png"
-                      alt="Beast"
-                      class="w-5 aspect-[3/5]"
-                    />
-                  </template>
-                  <template
-                    x-if={`character.afflatusType === '${AFFLATUS_TYPE.SPIRIT}'`}
-                  >
-                    <img
-                      src="/data/afflatus/at-spirit.png"
-                      alt="Spirit"
-                      class="w-5 aspect-[3/5]"
-                    />
-                  </template>
-                  <template
-                    x-if={`character.afflatusType === '${AFFLATUS_TYPE.INTELLECT}'`}
-                  >
-                    <img
-                      src="/data/afflatus/at-intellect.png"
-                      alt="Intellect"
-                      class="w-5 aspect-[3/5]"
-                    />
-                  </template>
-                </div>
+      {
+        characterEntries.map((characterEntry) => {
+          return (
+            <li
+              x-show={`filterCharacter({ 
+                rarity:'${characterEntry.data.star}',
+                afflatus:'${characterEntry.data.afflatus}',
+                dmgType:'${characterEntry.data.dmgType}'
+              })`}
+            >
+              <div class="group h-full min-h-80 oveflow-hidden rounded-lg card card-compact bg-base-100 border-base-content/10 border transition-all hover:shadow-md hover:shadow-base-content">
+                <a class="h-full" href={`/characters/${characterEntry.slug}`}>
+                  <div class="h-full relative ">
+                    <div class="absolute -top-1 left-2 w-6 group-hover:-top-2 transition-all">
+                      <AfflatusIcon type={characterEntry.data.afflatus} />
+                    </div>
 
-                <span
-                  class="absolute top-0 right-0 bg-primary-content text-white px-2"
-                  x-text="character.version"></span>
-                <h2 class="card-title" x-text="character.title"></h2>
+                    <img
+                      class="w-full"
+                      src={`/data/characters/${characterEntry.data.id}/card.png`}
+                    />
+                    <img
+                      class="absolute bottom-0 left-0 w-full"
+                      src={`/data/characters/common/bg-rare-${characterEntry.data.star}.png`}
+                    />
+
+                    <h5 class="absolute bottom-4 left-1/2 -translate-x-1/2 text-white font-normal">
+                      {characterEntry.data.title}
+                    </h5>
+                  </div>
+                </a>
               </div>
-            </a>
-          </div>
-        </li>
-      </template>
+            </li>
+          );
+        })
+      }
     </ul>
   </div>
 </Layout>
 
 <script>
-  import { DMG_TYPE, AFFLATUS_TYPE, RARITY } from "@config/constants";
-  import { CHARACTERS } from "@data/characters";
+  import { AFFLATUS_TYPE, DMG_TYPE, RARITY } from "@data/characters";
   import Alpine from "alpinejs";
 
   window.Alpine = Alpine;
 
   Alpine.data("dataset", () => ({
-    rarityFilter: "all",
-    rarities: ["all", ...Object.values(RARITY)],
-    afflatusTypeFilter: "all",
-    afflatusTypes: ["all", ...Object.values(AFFLATUS_TYPE)],
-    dmgTypeFilter: "all",
-    dmgTypes: ["all", ...Object.values(DMG_TYPE)],
+    rarityFilter: "ALL",
+    rarities: [
+      { title: "All", code: "ALL" },
+      ...Object.keys(RARITY).map((code) => ({
+        title: RARITY[code].value.toString(),
+        code: RARITY[code].value.toString(),
+      })),
+    ],
+    afflatusTypeFilter: "ALL",
+    afflatusTypes: [
+      { title: "All", code: "ALL" },
+      ...Object.keys(AFFLATUS_TYPE).map((code) => ({
+        title: AFFLATUS_TYPE[code].title,
+        code,
+      })),
+    ],
+    dmgTypeFilter: "ALL",
+    dmgTypes: [
+      { title: "All", code: "ALL" },
+      ...Object.keys(DMG_TYPE).map((code) => ({
+        title: DMG_TYPE[code].title,
+        code,
+      })),
+    ],
 
-    charaterList: CHARACTERS,
-    characters: CHARACTERS,
-
-    initCharaters(characterEntries) {
-      this.characters = characterEntries;
+    filterCharacter({ rarity, afflatus, dmgType }) {
+      return (
+        (this.afflatusTypeFilter === "ALL" || this.afflatusTypeFilter === afflatus) &&
+        (this.rarityFilter === "ALL" || this.rarityFilter === rarity) &&
+        (this.dmgTypeFilter === "ALL" || this.dmgTypeFilter === dmgType)
+      );
     },
 
     filterRarity(rarity) {
-      this.rarityFilter = rarity;
-      this.characters = this.charaterList.filter(
-        (char) => this.rarityFilter === "all" || char.rare === rarity
-      );
+      this.rarityFilter = rarity.code;
     },
 
     filterElementType(afflatusType) {
-      this.afflatusTypeFilter = afflatusType;
-      this.characters = this.charaterList.filter(
-        (char) =>
-          this.afflatusTypeFilter === "all" ||
-          char.afflatusType === afflatusType
-      );
+      this.afflatusTypeFilter = afflatusType.code;
     },
 
     filterDmgType(dmgType) {
-      this.dmgTypeFilter = dmgType;
-      this.characters = this.charaterList.filter(
-        (char) => this.dmgTypeFilter === "all" || char.dmgType === dmgType
-      );
+      this.dmgTypeFilter = dmgType.code;
     },
   }));
 </script>
