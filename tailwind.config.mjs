@@ -21,7 +21,9 @@ export default {
         highlight: "#db6f39",
         gray: "#808080",
 
-        common: "#576d84",
+        common: "#617594",
+        rare: '#623583',
+        epic: '#d3c47c',
 
         syntony: "#597463",
         abundance: "#9f844d",

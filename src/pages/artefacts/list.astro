@@ -24,7 +24,7 @@ const artefactEntries = await getCollection("artefacts");
   <h1>Artefact List</h1>
 
   <div x-data={"dataset"}>
-    <div class="filters sticky top-16 bg-base-100 p-2 z-10">
+    <div class="filters bg-base-100 p-2">
       <div class="grid grid-cols-filter">
         <div class="py-2 px-4">Rarity</div>
         <ul class="py-2 px-4 flex gap-1">
@@ -90,33 +90,36 @@ const artefactEntries = await getCollection("artefacts");
                       })`}
               >
                 <div>
-                  <h5 class="min-w-40">{artefactEntry.data.name}</h5>
+                  <h5 class="w-48">{artefactEntry.data.name}</h5>
                   <img
+                    loading="lazy"
                     class="w-20 h-20"
                     src={`/data/rouge/artefacts/${artefactEntry.data.image}`}
                     alt={`artefact ${artefactEntry.slug}`}
                   />
                 </div>
                 <div>
-                  <span
-                    class:list={[
-                      "badge font-bold",
-                      {
-                        "text-common border-common":
-                          artefactEntry.data.rarity === "COMMON",
-                        "text-rare border-rare":
-                          artefactEntry.data.rarity === "RARE",
-                        "text-epic border-epic":
-                          artefactEntry.data.rarity === "EPIC",
-                      },
-                    ]}
-                  >
-                    {ARTEFACTS_RARITY[artefactEntry.data.rarity].title}
-                  </span>
-                  <span class="badge font-bold border-base-content">
-                    {ARTEFACTS_TYPE[artefactEntry.data.type].title}
-                  </span>
-                  <div class="mt-1">
+                  <div class="flex gap-1">
+                    <span
+                      class:list={[
+                        "badge font-bold",
+                        {
+                          "text-common border-common":
+                            artefactEntry.data.rarity === "COMMON",
+                          "text-rare border-rare":
+                            artefactEntry.data.rarity === "RARE",
+                          "text-epic border-epic":
+                            artefactEntry.data.rarity === "EPIC",
+                        },
+                      ]}
+                    >
+                      {ARTEFACTS_RARITY[artefactEntry.data.rarity].title}
+                    </span>
+                    <span class="badge font-bold border-base-content">
+                      {ARTEFACTS_TYPE[artefactEntry.data.type].title}
+                    </span>
+                  </div>
+                  <div class="mt-1 flex gap-1">
                     {artefactEntry.data.tags.map((tag) => (
                       <span
                         class:list={[
@@ -195,9 +198,11 @@ const artefactEntries = await getCollection("artefacts");
     ],
 
     filterArtefact({ rarity, type, tags }) {
-      return (this.rarityFilter === "ALL" || this.rarityFilter === rarity) &&
+      return (
+        (this.rarityFilter === "ALL" || this.rarityFilter === rarity) &&
         (this.typeFilter === "ALL" || this.typeFilter === type) &&
-        (this.tagFilter === "ALL" ||  tags.includes(this.tagFilter));
+        (this.tagFilter === "ALL" || tags.includes(this.tagFilter))
+      );
     },
 
     filterRarity(rarity) {
