@@ -63,7 +63,8 @@ const menu = [
           </div>
           <div class="flex-1 px-2 mx-2">
             <span class="text-primary text-xl font-bold"
-              >Reverse: 1999 Gnomon</span>
+              >Reverse: 1999 Gnomon</span
+            >
           </div>
           <div class="flex-none hidden lg:block">
             <ul class="menu menu-horizontal py-1">
@@ -79,6 +80,8 @@ const menu = [
           </div>
         </div>
         <main class="container flex-1 pt-6 pb-20">
+          <!-- Page content here -->
+           <img class="fixed top-0 left-0 w-screen h-screen -z-10" src="/layout/bg.png" alt="bg" />
           <slot />
         </main>
         <Footer />

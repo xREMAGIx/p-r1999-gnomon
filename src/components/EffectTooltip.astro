@@ -36,12 +36,13 @@ const { Content } = await effect.render();
   >
   <div
     class="absolute block bottom-full left-1/2 -translate-x-1/2 bg-base-100 w-40 text-base-content border-line-paper border p-2 transition-all duration-300 invisible opacity-0"
-    :class="isShow || isToggle ? 'visible opacity-100' : ''"
+    :class="isShow || isToggle ? '!visible !opacity-100' : ''"
   >
     <Content
       components={{
         p: MarkdownContent,
         strong: MarkdownHighlight,
+        effect: Astro.self,
       }}
     />
   </div>

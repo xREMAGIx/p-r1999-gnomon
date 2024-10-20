@@ -1,8 +1,9 @@
 ---
-import { AFFLATUS_TYPE } from "@config/constants";
+import { AFFLATUS_TYPE } from '@data/characters';
+
 
 interface Props {
-  type?: string;
+  type?: keyof typeof AFFLATUS_TYPE;
   variant: "text" | "filled" | "outline";
 }
 
@@ -10,32 +11,32 @@ const { type, variant } = Astro.props;
 
 const typeStyle = (() => {
   switch (type) {
-    case AFFLATUS_TYPE.MINERAL:
+    case 'MINERAL':
       return {
         backgroundColor: "bg-mineral",
         textColor: "text-mineral",
       };
-    case AFFLATUS_TYPE.STAR:
+    case 'STAR':
       return {
         backgroundColor: "bg-star",
         textColor: "text-star",
       };
-    case AFFLATUS_TYPE.PLANT:
+    case 'PLANT':
       return {
         backgroundColor: "bg-plant",
         textColor: "text-plant",
       };
-    case AFFLATUS_TYPE.BEAST:
+    case 'BEAST':
       return {
         backgroundColor: "bg-beast",
         textColor: "text-beast",
       };
-    case AFFLATUS_TYPE.SPIRIT:
+    case 'SPIRIT':
       return {
         backgroundColor: "bg-spirit",
         textColor: "text-spirit",
       };
-    case AFFLATUS_TYPE.INTELLECT:
+    case 'INTELLECT':
       return {
         backgroundColor: "bg-intellect",
         textColor: "text-intellect",
