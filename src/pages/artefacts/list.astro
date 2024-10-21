@@ -84,7 +84,7 @@ function sortArtefact(a, b) {
       </div>
     </div>
 
-    <ul class="mt-8 flex flex-col gap-6">
+    <ul class="mt-8 flex flex-col gap-8">
       {
         artefactEntries
           .sort((a, b) => sortArtefact(a, b))
@@ -113,20 +113,20 @@ function sortArtefact(a, b) {
                   <div class="flex gap-1">
                     <span
                       class:list={[
-                        "badge font-bold",
+                        "badge font-medium border-transparent",
                         {
-                          "text-common border-common":
+                          "text-common ":
                             artefactEntry.data.rarity === "COMMON",
-                          "text-rare border-rare":
+                          "text-rare ":
                             artefactEntry.data.rarity === "RARE",
-                          "text-epic border-epic":
+                          "text-epic ":
                             artefactEntry.data.rarity === "EPIC",
                         },
                       ]}
                     >
                       {ARTEFACT_RARITY[artefactEntry.data.rarity].title}
                     </span>
-                    <span class="badge font-bold border-base-content">
+                    <span class="badge font-medium border-transparent">
                       {ARTEFACT_TYPE[artefactEntry.data.type].title}
                     </span>
                   </div>
