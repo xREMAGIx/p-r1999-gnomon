@@ -12,6 +12,10 @@ const { type } = Astro.props;
   {
     (() => {
       switch (type) {
+        case "DEBUFF":
+          return (
+            <img src="/data/card/attr-debuff.png" alt="attr-debuff icon" />
+          );
         case "BUFF":
           return <img src="/data/card/attr-buff.png" alt="attr-buff icon" />;
         default:

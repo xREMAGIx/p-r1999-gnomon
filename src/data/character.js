@@ -61,6 +61,9 @@ export const SPECIALTY = {
   FOLLOW_UP_ATTACK: {
     title: "Follow-up Attack",
   },
+  CONTROL: {
+    title: "Control",
+  }
 };
 
 export const RARITY = {
