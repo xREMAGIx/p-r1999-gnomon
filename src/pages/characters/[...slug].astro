@@ -1,0 +1,36 @@
+---
+import "@styles/markdown-layout.css";
+import CardInfo from "@components/CardInfo.astro";
+import EffectTooltip from "@components/EffectTooltip.astro";
+import MarkdownContent from "@components/MarkdownContent.astro";
+import MarkdownHighlight from "@components/MarkdownHighlight.astro";
+import Material from "@components/Material.astro";
+import Tooltip from "@components/Tooltip.astro";
+import Layout from "@layouts/Layout.astro";
+import "@styles/markdown-layout.css";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const characterEntries = await getCollection("characters");
+  return characterEntries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<Layout title={`${entry.data.title} | Character`}>
+  <Content
+    components={{
+      p: MarkdownContent,
+      effect: EffectTooltip,
+      strong: MarkdownHighlight,
+      tooltip: Tooltip,
+      material: Material,
+      'card-info': CardInfo,
+    }}
+  />
+</Layout>

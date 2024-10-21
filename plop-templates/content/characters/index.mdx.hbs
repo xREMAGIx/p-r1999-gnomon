@@ -1,0 +1,20 @@
+---
+title: "{{titleCase name}}"
+id: "{{dashCase name}}"
+code: "{{constantCase name}}"
+star: {{star}}
+afflatus: "{{afflatus}}"
+dmgType: "{{dmgType}}"
+version: "{{version}}"
+<!-- TODO - Update specialties, if there's a new specialty, please add it to SPECIALTY in data/characters.ts file -->
+specialties: []
+isLimited: {{isLimited}}
+---
+
+import CardInfo from "@components/CardInfo.astro";
+import CardStar from "@components/CardStar.astro";
+import CardType from "@components/CardType.astro";
+import CharacterStar from "@components/CharacterStar.astro";
+import { AFFLATUS_TYPE, DMG_TYPE, SPECIALTY } from "@data/character"
+
+# {{titleCase name}}

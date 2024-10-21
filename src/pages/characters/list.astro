@@ -1,0 +1,163 @@
+---
+import AfflatusIcon from "@components/AfflatusIcon.astro";
+import Layout from "@layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const characterEntries = await getCollection("characters");
+---
+
+<Layout title="Reverse 1999 Gnomon">
+  <div class="text-sm breadcrumbs">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li>Characters</li>
+    </ul>
+  </div>
+
+  <h1 class="text-center">Character List</h1>
+
+  <div x-data={"dataset"}>
+    <div class="filters">
+      <div class="grid grid-cols-filter">
+        <div class="py-2 px-4">Rarity</div>
+        <ul class="py-2 px-4 flex gap-1">
+          <template x-for="rarity in rarities">
+            <li>
+              <button
+                class="btn btn-outline btn-xs"
+                :class="rarity.code === rarityFilter ? 'btn-active' : ''"
+                @click="filterRarity(rarity)"
+                x-text="rarity.title"
+              >
+              </button>
+            </li>
+          </template>
+        </ul>
+
+        <div class="py-2 px-4">Afflatus</div>
+        <ul class="py-2 px-4 flex gap-1">
+          <template x-for="afflatusType in afflatusTypes">
+            <li>
+              <button
+                class="btn btn-outline btn-xs"
+                :class="afflatusType.code === afflatusTypeFilter ? 'btn-active' : ''"
+                @click="filterElementType(afflatusType)"
+                x-text="afflatusType.title"
+              >
+              </button>
+            </li>
+          </template>
+        </ul>
+
+        <div class="py-2 px-4">Damage type</div>
+        <ul class="py-2 px-4 flex gap-1">
+          <template x-for="dmgType in dmgTypes">
+            <li>
+              <button
+                class="btn btn-outline btn-xs"
+                :class="dmgType.code === dmgTypeFilter ? 'btn-active' : ''"
+                @click="filterDmgType(dmgType)"
+                x-text="dmgType.title"
+              >
+              </button>
+            </li>
+          </template>
+        </ul>
+      </div>
+    </div>
+
+    <ul class="mt-8 grid grid-cols-6 gap-4">
+      {
+        characterEntries.map((characterEntry) => {
+          return (
+            <li
+              x-show={`filterCharacter({ 
+                rarity:'${characterEntry.data.star}',
+                afflatus:'${characterEntry.data.afflatus}',
+                dmgType:'${characterEntry.data.dmgType}'
+              })`}
+            >
+              <div class="group h-full min-h-80 oveflow-hidden rounded-lg card card-compact bg-base-100 border-base-content/10 border transition-all hover:shadow-md hover:shadow-base-content">
+                <a class="h-full" href={`/characters/${characterEntry.slug}`}>
+                  <div class="h-full relative ">
+                    <div class="absolute -top-1 left-2 w-6 group-hover:-top-2 transition-all">
+                      <AfflatusIcon type={characterEntry.data.afflatus} />
+                    </div>
+
+                    <img
+                      class="w-full"
+                      src={`/data/characters/${characterEntry.data.id}/card.png`}
+                    />
+                    <img
+                      class="absolute bottom-0 left-0 w-full"
+                      src={`/data/characters/common/bg-rare-${characterEntry.data.star}.png`}
+                    />
+
+                    <h5 class="absolute bottom-4 left-1/2 -translate-x-1/2 text-white font-normal">
+                      {characterEntry.data.title}
+                    </h5>
+                  </div>
+                </a>
+              </div>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</Layout>
+
+<script>
+  import { AFFLATUS_TYPE, DMG_TYPE, RARITY } from "@data/character";
+  import Alpine from "alpinejs";
+
+  window.Alpine = Alpine;
+
+  Alpine.data("dataset", () => ({
+    rarityFilter: "ALL",
+    rarities: [
+      { title: "All", code: "ALL" },
+      ...Object.keys(RARITY).map((code) => ({
+        title: RARITY[code].value.toString(),
+        code: RARITY[code].value.toString(),
+      })),
+    ],
+    afflatusTypeFilter: "ALL",
+    afflatusTypes: [
+      { title: "All", code: "ALL" },
+      ...Object.keys(AFFLATUS_TYPE).map((code) => ({
+        title: AFFLATUS_TYPE[code].title,
+        code,
+      })),
+    ],
+    dmgTypeFilter: "ALL",
+    dmgTypes: [
+      { title: "All", code: "ALL" },
+      ...Object.keys(DMG_TYPE).map((code) => ({
+        title: DMG_TYPE[code].title,
+        code,
+      })),
+    ],
+
+    filterCharacter({ rarity, afflatus, dmgType }) {
+      return (
+        (this.afflatusTypeFilter === "ALL" ||
+          this.afflatusTypeFilter === afflatus) &&
+        (this.rarityFilter === "ALL" || this.rarityFilter === rarity) &&
+        (this.dmgTypeFilter === "ALL" || this.dmgTypeFilter === dmgType)
+      );
+    },
+
+    filterRarity(rarity) {
+      this.rarityFilter = rarity.code;
+    },
+
+    filterElementType(afflatusType) {
+      this.afflatusTypeFilter = afflatusType.code;
+    },
+
+    filterDmgType(dmgType) {
+      this.dmgTypeFilter = dmgType.code;
+    },
+  }));
+</script>
