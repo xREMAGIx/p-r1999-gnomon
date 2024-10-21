@@ -1,4 +1,4 @@
-export const ARTEFACTS_TYPE = {
+export const ARTEFACT_TYPE = {
   WEAPON: { title: "Weapon" },
   CURIO: { title: "Curio" },
   ACCESSORY: { title: "Accessory" },
@@ -6,7 +6,7 @@ export const ARTEFACTS_TYPE = {
   DISK: { title: "Disk" },
 };
 
-export const ARTEFACTS_TAG = {
+export const ARTEFACT_TAG = {
   SUPPORT: { title: "Support" },
   RITUAL: { title: "Ritual" },
   CRAFT: { title: "Craft" },
@@ -15,9 +15,9 @@ export const ARTEFACTS_TAG = {
   ABUNDANCE: { title: "Abundance" },
   EXTRA_ACTION: { title: "Extra Action" },
   VOLTAIC: { title: "Voltaic" },
-}
+};
 
-export const ARTEFACTS_RARITY = {
+export const ARTEFACT_RARITY = {
   COMMON: { title: "Common", code: "common" },
   RARE: { title: "Rare", code: "rare" },
   EPIC: { title: "Epic", code: "epic" },

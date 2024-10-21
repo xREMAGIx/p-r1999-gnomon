@@ -108,7 +108,7 @@ const characterEntries = await getCollection("characters");
 </Layout>
 
 <script>
-  import { AFFLATUS_TYPE, DMG_TYPE, RARITY } from "@data/characters";
+  import { AFFLATUS_TYPE, DMG_TYPE, RARITY } from "@data/character";
   import Alpine from "alpinejs";
 
   window.Alpine = Alpine;
@@ -141,7 +141,8 @@ const characterEntries = await getCollection("characters");
 
     filterCharacter({ rarity, afflatus, dmgType }) {
       return (
-        (this.afflatusTypeFilter === "ALL" || this.afflatusTypeFilter === afflatus) &&
+        (this.afflatusTypeFilter === "ALL" ||
+          this.afflatusTypeFilter === afflatus) &&
         (this.rarityFilter === "ALL" || this.rarityFilter === rarity) &&
         (this.dmgTypeFilter === "ALL" || this.dmgTypeFilter === dmgType)
       );

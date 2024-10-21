@@ -2,19 +2,15 @@
 import EffectTooltip from "@components/EffectTooltip.astro";
 import MarkdownContent from "@components/MarkdownContent.astro";
 import MarkdownHighlight from "@components/MarkdownHighlight.astro";
-import {
-  ARTEFACTS_RARITY,
-  ARTEFACTS_TAG,
-  ARTEFACTS_TYPE,
-} from "@data/artefacts";
+import { ARTEFACT_RARITY, ARTEFACT_TAG, ARTEFACT_TYPE } from "@data/artefact";
 import Layout from "@layouts/Layout.astro";
 import { getCollection } from "astro:content";
 
 const artefactEntries = await getCollection("artefacts");
 
 function sortArtefact(a, b) {
-  const rarityOrder = ['COMMON', 'RARE', 'EPIC'];
-  const typeOrder = ['WEAPON', 'CURIO', "ACCESSORY", "MEDICATION",'DISK'];
+  const rarityOrder = ["COMMON", "RARE", "EPIC"];
+  const typeOrder = ["WEAPON", "CURIO", "ACCESSORY", "MEDICATION", "DISK"];
   const rarityIndex = rarityOrder.indexOf(a.data.rarity);
   const typeIndex = typeOrder.indexOf(a.data.type);
   const bRarityIndex = rarityOrder.indexOf(b.data.rarity);
@@ -91,9 +87,7 @@ function sortArtefact(a, b) {
     <ul class="mt-8 flex flex-col gap-6">
       {
         artefactEntries
-          .sort((a, b) =>
-            sortArtefact(a, b)
-          )
+          .sort((a, b) => sortArtefact(a, b))
           .map(async (artefactEntry) => {
             const { Content } = await artefactEntry.render();
 
@@ -130,10 +124,10 @@ function sortArtefact(a, b) {
                         },
                       ]}
                     >
-                      {ARTEFACTS_RARITY[artefactEntry.data.rarity].title}
+                      {ARTEFACT_RARITY[artefactEntry.data.rarity].title}
                     </span>
                     <span class="badge font-bold border-base-content">
-                      {ARTEFACTS_TYPE[artefactEntry.data.type].title}
+                      {ARTEFACT_TYPE[artefactEntry.data.type].title}
                     </span>
                   </div>
                   <div class="mt-1 flex gap-1">
@@ -156,7 +150,7 @@ function sortArtefact(a, b) {
                           },
                         ]}
                       >
-                        {ARTEFACTS_TAG[tag].title}
+                        {ARTEFACT_TAG[tag].title}
                       </span>
                     ))}
                   </div>
@@ -179,11 +173,7 @@ function sortArtefact(a, b) {
 </Layout>
 
 <script>
-  import {
-    ARTEFACTS_RARITY,
-    ARTEFACTS_TAG,
-    ARTEFACTS_TYPE,
-  } from "@data/artefacts";
+  import { ARTEFACT_RARITY, ARTEFACT_TAG, ARTEFACT_TYPE } from "@data/artefact";
   import Alpine from "alpinejs";
 
   window.Alpine = Alpine;
@@ -192,24 +182,24 @@ function sortArtefact(a, b) {
     rarityFilter: "ALL",
     rarities: [
       { title: "All", code: "ALL" },
-      ...Object.keys(ARTEFACTS_RARITY).map((code) => ({
-        title: ARTEFACTS_RARITY[code].title,
+      ...Object.keys(ARTEFACT_RARITY).map((code) => ({
+        title: ARTEFACT_RARITY[code].title,
         code,
       })),
     ],
     typeFilter: "ALL",
     types: [
       { title: "All", code: "ALL" },
-      ...Object.keys(ARTEFACTS_TYPE).map((code) => ({
-        title: ARTEFACTS_TYPE[code].title,
+      ...Object.keys(ARTEFACT_TYPE).map((code) => ({
+        title: ARTEFACT_TYPE[code].title,
         code,
       })),
     ],
     tagFilter: "ALL",
     tags: [
       { title: "All", code: "ALL" },
-      ...Object.keys(ARTEFACTS_TAG).map((code) => ({
-        title: ARTEFACTS_TAG[code].title,
+      ...Object.keys(ARTEFACT_TAG).map((code) => ({
+        title: ARTEFACT_TAG[code].title,
         code,
       })),
     ],

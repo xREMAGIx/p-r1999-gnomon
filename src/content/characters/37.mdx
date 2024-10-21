@@ -5,12 +5,9 @@ code: "37"
 star: 6
 afflatus: "STAR"
 dmgType: "MENTAL"
-version: '1.3'
+version: "1.3"
 specialties: ["DPS", "SUPPORT", "FOLLOW_UP_ATTACK"]
-images: {
-  portrait: "portrait.webp",
-  signature: "signature.png"
-}
+images: { portrait: "portrait.webp", signature: "signature.png" }
 isLimited: false
 ---
 
@@ -18,7 +15,7 @@ import CardInfo from "@components/CardInfo.astro";
 import CardStar from "@components/CardStar.astro";
 import CardType from "@components/CardType.astro";
 import CharacterStar from "@components/CharacterStar.astro";
-import { AFFLATUS_TYPE, DMG_TYPE, SPECIALTY } from "@data/characters"
+import { AFFLATUS_TYPE, DMG_TYPE, SPECIALTY } from "@data/character";
 
 # 37
 
@@ -51,7 +48,7 @@ import { AFFLATUS_TYPE, DMG_TYPE, SPECIALTY } from "@data/characters"
       Arcanist's work, exhibited in the 1990s for 16 years, created on July 27th in summer. Exhibition location: an island in the Aegean Sea region.
 
       ###### Medium
-      Numbers 
+      Numbers
 
       ###### Afflatus
       The Brilliant Morning Star [Star], Mathematical Calculations
@@ -70,6 +67,7 @@ import { AFFLATUS_TYPE, DMG_TYPE, SPECIALTY } from "@data/characters"
         alt="signature"
       />
     </div>
+
   </div>
   <div>
     <div class="w-80">
@@ -115,13 +113,14 @@ import { AFFLATUS_TYPE, DMG_TYPE, SPECIALTY } from "@data/characters"
     1-target attack. Deals **140%** Mental DMG plus (ATK x**40%**) Genesis DMG.
   :::
 
-  :::card-info{star=2 type="ATTACK" note="An obvious triangle, speaking out against overlooked injustices."}
-    1-target attack. Deals **210%** Mental DMG plus (ATK x**60%**) Genesis DMG.
-  :::
+:::card-info{star=2 type="ATTACK" note="An obvious triangle, speaking out against overlooked injustices."}
+1-target attack. Deals **210%** Mental DMG plus (ATK x**60%**) Genesis DMG.
+:::
 
-  :::card-info{star=3 type="ATTACK" note="An obvious triangle, speaking out against overlooked injustices, the evidence is as follows."}
-    1-target attack. Deals **350%** Mental DMG plus (ATK x**100%**) Genesis DMG.
-  :::
+:::card-info{star=3 type="ATTACK" note="An obvious triangle, speaking out against overlooked injustices, the evidence is as follows."}
+1-target attack. Deals **350%** Mental DMG plus (ATK x**100%**) Genesis DMG.
+:::
+
 </div>
 
 ### Curve Mapping
@@ -138,15 +137,16 @@ import { AFFLATUS_TYPE, DMG_TYPE, SPECIALTY } from "@data/characters"
     enemies. Gains 1 additional stack of :effect{code="STURDINESS"}.
   :::
 
-  :::card-info{star=2 type="ATTACK" note="Such beautiful form. Desirable in dimensions and fractals."}
-    Mass Attack. Deals **105%** Mental DMG plus (ATK x**60**%) Genesis DMG to 2
-    enemies. Gains 1 additional stack of :effect{code="STURDINESS"}.
-  :::
+:::card-info{star=2 type="ATTACK" note="Such beautiful form. Desirable in dimensions and fractals."}
+Mass Attack. Deals **105%** Mental DMG plus (ATK x**60**%) Genesis DMG to 2
+enemies. Gains 1 additional stack of :effect{code="STURDINESS"}.
+:::
 
-  :::card-info{star=3 type="ATTACK" note="Such beautiful form. Desirable in dimensions and fractals — a truth agreed upon by all."}
-    Mass Attack. Deals **175%** Mental DMG plus (ATK x**100**%) Genesis DMG to 2
-    enemies. Gains 1 additional stack of :effect{code="STURDINESS"}.
-  :::
+:::card-info{star=3 type="ATTACK" note="Such beautiful form. Desirable in dimensions and fractals — a truth agreed upon by all."}
+Mass Attack. Deals **175%** Mental DMG plus (ATK x**100**%) Genesis DMG to 2
+enemies. Gains 1 additional stack of :effect{code="STURDINESS"}.
+:::
+
 </div>
 
 ### Kingdom of Geometry

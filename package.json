@@ -7,7 +7,8 @@
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "plop": "plop"
   },
   "dependencies": {
     "@astrojs/alpinejs": "^0.4.0",
@@ -28,6 +29,7 @@
     "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
-    "daisyui": "^3.9.4"
+    "daisyui": "^3.9.4",
+    "plop": "^4.0.1"
   }
 }
