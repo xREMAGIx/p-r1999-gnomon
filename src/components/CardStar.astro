@@ -1,6 +1,6 @@
 ---
 interface Props {
-	star: number;
+	star: string;
 }
 
 const { star } = Astro.props;
@@ -9,7 +9,7 @@ const { star } = Astro.props;
 <ul class="flex justify-center gap-1">
     {(()=>{
         switch (star) {
-            case 2:
+            case '2':
                 return (
                     <li>
                         <img class="w-8 h-8" src="/data/card/lv-star.png" alt="lv-star icon"/>
@@ -21,7 +21,7 @@ const { star } = Astro.props;
                         <img class="w-8 h-8" src="/data/card/lv-unstar.png" alt="lv-unstar icon" />
                     </li>
                 )
-            case 3:
+            case '3':
                 return (
                     <li>
                         <img class="w-8 h-8" src="/data/card/lv-star.png" alt="lv-star icon"/>

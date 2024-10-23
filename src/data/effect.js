@@ -3,7 +3,10 @@ export const EFFECT_TYPE = {
     title: "Counter",
   },
   POS_STATUS: {
-    title: "Pos status",
+    title: "Pos Status",
+  },
+  NEG_STATUS: {
+    title: "Neg Status",
   },
   UNKNOWN: {
     title: "Unknown",
