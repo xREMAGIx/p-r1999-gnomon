@@ -1,0 +1,70 @@
+---
+import type { AFFLATUS_TYPE } from "@data/character";
+
+interface Props {
+  type: keyof typeof AFFLATUS_TYPE;
+  variant?: "tag";
+}
+
+const { type, variant = "tag" } = Astro.props;
+---
+
+<div>
+  {
+    (() => {
+      const assetKey = variant === "tag" ? "at" : "";
+      switch (type) {
+        case "INTELLECT":
+          return (
+            <img
+              src={`/data/afflatus/${assetKey}-intellect.png`}
+              alt="Intellect"
+              class="aspect-[3/5]"
+            />
+          );
+        case "SPIRIT":
+          return (
+            <img
+              src={`/data/afflatus/${assetKey}-spirit.png`}
+              alt="Spirit"
+              class="aspect-[3/5]"
+            />
+          );
+        case "PLANT":
+          return (
+            <img
+              src={`/data/afflatus/${assetKey}-plant.png`}
+              alt="Plant"
+              class="aspect-[3/5]"
+            />
+          );
+        case "BEAST":
+          return (
+            <img
+              src={`/data/afflatus/${assetKey}-beast.png`}
+              alt="Beast"
+              class="aspect-[3/5]"
+            />
+          );
+        case "STAR":
+          return (
+            <img
+              src={`/data/afflatus/${assetKey}-star.png`}
+              alt="Star"
+              class="aspect-[3/5]"
+            />
+          );
+        case "MINERAL":
+          return (
+            <img
+              src={`/data/afflatus/${assetKey}-mineral.png`}
+              alt="Mineral"
+              class="aspect-[3/5]"
+            />
+          );
+        default:
+          return null;
+      }
+    })()
+  }
+</div>

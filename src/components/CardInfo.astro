@@ -1,0 +1,29 @@
+---
+import CardStar from "@components/CardStar.astro";
+import CardType from "@components/CardType.astro";
+import type { CARD_TYPE } from "@data/character";
+
+interface Props {
+  star?: string;
+  type: keyof typeof CARD_TYPE;
+  note: string;
+}
+
+const { star, type, note } = Astro.props;
+---
+
+<div class="paper-texture">
+  {star && <CardStar star={star} />}
+  <slot />
+  <div class="mt-2 pt-2 flex items-start">
+    <img
+      class="w-3 aspect-[20/32] shrink-0 mt-1 mr-1"
+      src="/data/card/note.png"
+      alt="note icon"
+    />
+    <div class="text-gray">{note}</div>
+  </div>
+  <div class="mt-auto">
+    <CardType type={type} />
+  </div>
+</div>

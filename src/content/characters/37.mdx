@@ -1,0 +1,248 @@
+---
+title: "37"
+id: "37"
+code: "37"
+star: 6
+afflatus: "STAR"
+dmgType: "MENTAL"
+version: "1.3"
+specialties: ["DPS", "SUPPORT", "FOLLOW_UP_ATTACK"]
+images: { portrait: "portrait.webp", signature: "signature.png" }
+isLimited: false
+---
+
+import CardInfo from "@components/CardInfo.astro";
+import CardStar from "@components/CardStar.astro";
+import CardType from "@components/CardType.astro";
+import CharacterStar from "@components/CharacterStar.astro";
+import { AFFLATUS_TYPE, DMG_TYPE, SPECIALTY } from "@data/character";
+
+# 37
+
+<div class="my-8">
+  <CharacterStar star={frontmatter.star} />
+</div>
+
+<div class="flex justify-between flex-col-reverse md:flex-row gap-8">
+  <div>
+    <div class="flex gap-8 items-center">
+      <img
+        class="w-32" 
+        src={`/data/afflatus/af-${AFFLATUS_TYPE[frontmatter.afflatus].assetCode}.png`}
+        alt={`afflatus ${AFFLATUS_TYPE[frontmatter.afflatus].assetCode}`}
+      />
+      <div class="flex gap-2 items-center">
+        <img
+          class="w-14 h-14"
+          src={`/data/dmg-type/${DMG_TYPE[frontmatter.dmgType].assetCode}.png`}
+          alt={`damage type ${DMG_TYPE[frontmatter.dmgType].assetCode}`}
+        />
+        ##### {DMG_TYPE[frontmatter.dmgType].title}
+      </div>
+    </div>
+    {
+      frontmatter.specialties.map((specialty) => (
+        <div class="mx-1 my-2 badge badge-lg bg-base-content/10">{SPECIALTY[specialty].title}</div>
+    ))}
+    <div class="mt-4">
+      Arcanist's work, exhibited in the 1990s for 16 years, created on July 27th in summer. Exhibition location: an island in the Aegean Sea region.
+
+      ###### Medium
+      Numbers
+
+      ###### Afflatus
+      The Brilliant Morning Star [Star], Mathematical Calculations
+
+      ###### Fragrance note
+      Aquatic, Sea Water, Salt Flower, Coastal Pine, Driftwood
+
+      ###### Dimensions
+      64 29/64x32 3/16x7 9/32 inches.
+
+    </div>
+    <div class="mt-4 flex gap-4 justify-center">
+      <img
+        class="w-64"
+        src={`/data/characters/${frontmatter.id}/signature.png`}
+        alt="signature"
+      />
+    </div>
+
+  </div>
+  <div class="flex flex-col items-center">
+    <div class="w-80">
+      <img
+        class="w-full"
+        src={`/data/characters/${frontmatter.id}/portrait.png`}
+        alt="portrait"
+      />
+    </div>
+    <div class="mt-5 flex gap-6 justify-center items-end">
+      <div class="text-center">
+        <img
+          class="w-40"
+          src={`/data/characters/${frontmatter.id}/udimo.png`}
+          alt="udimo"
+        />
+        Udimo
+      </div>
+      <div class="text-center">
+        <img
+          class="w-24"
+          src={`/data/characters/${frontmatter.id}/chibi.png`}
+          alt="chibi"
+        />
+        Chibi
+      </div>
+    </div>
+  </div>
+</div>
+
+## Arcane Skills
+
+### Triangulation
+
+<div class="flex gap-5 flex-col md:flex-row items-center md:items-stretch">
+  <div class="w-48 shrink-0">
+    <img
+      src={`/data/characters/${frontmatter.id}/skill-1.png`}
+      alt="Triangulation"
+    />
+  </div>
+
+:::card-info{star='1' type="ATTACK" note="An obvious triangle."}
+1-target attack. Deals **140%** Mental DMG plus (ATK x**40%**) Genesis DMG.
+:::
+
+:::card-info{star='2' type="ATTACK" note="An obvious triangle, speaking out against overlooked injustices."}
+1-target attack. Deals **210%** Mental DMG plus (ATK x**60%**) Genesis DMG.
+:::
+
+:::card-info{star='3' type="ATTACK" note="An obvious triangle, speaking out against overlooked injustices, the evidence is as follows."}
+1-target attack. Deals **350%** Mental DMG plus (ATK x**100%**) Genesis DMG.
+:::
+
+</div>
+
+### Curve Mapping
+
+<div class="flex gap-5 flex-col md:flex-row items-center md:items-stretch">
+  <div class="w-48 shrink-0">
+    <img
+      src={`/data/characters/${frontmatter.id}/skill-2.png`}
+      alt="Curve Mapping"
+    />
+  </div>
+  :::card-info{star=1 type="ATTACK" note="Such beautiful form."}
+    Mass Attack. Deals **70%** Mental DMG plus (ATK x**40**%) Genesis DMG to 2
+    enemies. Gains 1 additional stack of :effect{code="STURDINESS"}.
+  :::
+
+:::card-info{star='2' type="ATTACK" note="Such beautiful form. Desirable in dimensions and fractals."}
+Mass Attack. Deals **105%** Mental DMG plus (ATK x**60**%) Genesis DMG to 2
+enemies. Gains 1 additional stack of :effect{code="STURDINESS"}.
+:::
+
+:::card-info{star='3' type="ATTACK" note="Such beautiful form. Desirable in dimensions and fractals — a truth agreed upon by all."}
+Mass Attack. Deals **175%** Mental DMG plus (ATK x**100**%) Genesis DMG to 2
+enemies. Gains 1 additional stack of :effect{code="STURDINESS"}.
+:::
+
+</div>
+
+### Kingdom of Geometry
+
+<div class="flex gap-5 flex-col md:flex-row items-center md:items-stretch">
+  <div class="w-48 shrink-0">
+    <img
+      src={`/data/characters/${frontmatter.id}/ultimate.png`}
+      alt="Kingdom of Geometry"
+    />
+  </div>
+  :::card-info{star=1 type="BUFF" note="It is the omega, the final answer, the result of all calculations."}
+    Mass Buff. Grants 2 stacks of :effect{code="NUMERAL_PERCEPTION"} to all allies,
+    gains 2 stacks of :effect{code="ENLIGHTENMENT"}, and gains Eureka +2.
+  :::
+</div>
+
+## Inheritance
+
+### Calculation of Genesis
+
+<div class="mt-4 flex items-center">
+  :img{.w-8.mr-2 src="/data/insight/insight-1.png" alt="insight-1 icon"}
+  ##### Insight 1
+</div>
+
+After using an Incantation, gains Eureka +1. After another ally takes an extra action, gains Eureka +1. When at 5 Eureka, consumes 5 Eureka to cast :tooltip[Mass attack. Deals **120%** Mental DMG plus (ATK x**40%**) Genesis DMG to all enemies.]{title="[Supplementary Formula]"}. This attack is regarded as 1 follow-up attack and does not grant Eureka.
+
+<div class="mt-4 flex items-center">
+  :img{.w-8.mr-2 src="/data/insight/insight-2.png" alt="insight-2 icon"}
+  ##### Insight 2
+</div>
+
+Critical DMG **+15%** when the caster enters battle.
+
+<div class="mt-4 flex items-center">
+  :img{.w-8.mr-2 src="/data/insight/insight-3.png" alt="insight-3 icon"}
+  ##### Insight 3
+</div>
+
+When entering battle, Critical Rate **+20%**. All Genesis DMG applied through Incantations can critically hit.
+
+## Portray
+
+:span[Lv. 1:]{.text-2xl.mr-2}
+_Calculation of Genesis_: When entering battle, Critical Rate boost increased to **40%**.
+
+:span[Lv. 2:]{.text-2xl.mr-2}
+_Calculation of Genesis_: :effect{code="NUMERAL_PERCEPTION"}
+'s Mental DMG is increased to **180%**; additional Genesis DMG increased to (ATKx**60%**).
+
+:span[Lv. 3:]{.text-2xl.mr-2}
+_Kingdom of Geometry_: :effect{code="ENLIGHTENMENT"} increased
+to **3** stacks; Eureka gained increased to **3**.
+
+:span[Lv. 4:]{.text-2xl.mr-2}
+_Calculation of Genesis_: :tooltip[Mass attack. Deals **120%** Mental DMG plus (ATK x**40%**) Genesis DMG to all enemies.]{title="[Supplementary Formula]"}
+'s Mental DMG is increased to **240%**; additional Genesis DMG increased to
+(ATKx**80%**).
+
+:span[Lv. 5:]{.text-2xl.mr-2}
+_Kingdom of Geometry_: :effect{code="NUMERAL_PERCEPTION"} increased
+to **3** stacks; Eureka gained increased to **4**.
+
+## Insight Materials
+
+<div class="flex flex-col md:flex-row gap-4">
+  <div class="flex-1">
+    <div class="flex items-center">
+      :img{.w-6.mr-2 src="/data/insight/insight-1.png" alt="insight-1 icon"}
+      ##### Insight 1
+    </div>
+    :material{code="SHARPODONTY" variant="small" require="18000"}
+    :material{code="PAGE_OF_STARLIT_ASCENT" variant="small" require="6"}
+    :material{code="LIQUEFIED_TERROR" variant="small" require="5"}
+    :material{code="MAGNESIA_CRYSTAL" variant="small" require="6"}
+  </div>
+  <div class="flex-1">
+    <div class="flex items-center">
+      :img{.w-6.mr-2 src="/data/insight/insight-2.png" alt="insight-2 icon"}
+      ##### Insight 2
+    </div>
+    :material{code="SHARPODONTY" variant="small" require="40000"}
+    :material{code="SCROLL_OF_STARLIT_ASCENT" variant="small" require="10"}
+    :material{code="WINGED_KEY" variant="small" require="6"}
+    :material{code="ESOTERIC_BONES" variant="small" require="6"}
+  </div>
+  <div class="flex-1">
+    <div class="flex items-center">
+      :img{.w-6.mr-2 src="/data/insight/insight-3.png" alt="insight-3 icon"}
+      ##### Insight 3
+    </div>
+    :material{code="SHARPODONTY" variant="small" require="200000"}
+    :material{code="TOME_OF_STARLIT_ASCENT" variant="small" require="16"}
+    :material{code="SERPENT_SCEPTER" variant="small" require="3"}
+    :material{code="BOGEYMAN" variant="small" require="5"}
+  </div>
+</div>

@@ -1,0 +1,229 @@
+---
+import EffectTooltip from "@components/EffectTooltip.astro";
+import MarkdownContent from "@components/MarkdownContent.astro";
+import MarkdownHighlight from "@components/MarkdownHighlight.astro";
+import { ARTEFACT_RARITY, ARTEFACT_TAG, ARTEFACT_TYPE } from "@data/artefact";
+import Layout from "@layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const artefactEntries = await getCollection("artefacts");
+
+function sortArtefact(a, b) {
+  const rarityOrder = ["COMMON", "RARE", "EPIC"];
+  const typeOrder = ["WEAPON", "CURIO", "ACCESSORY", "MEDICATION", "DISK"];
+  const rarityIndex = rarityOrder.indexOf(a.data.rarity);
+  const typeIndex = typeOrder.indexOf(a.data.type);
+  const bRarityIndex = rarityOrder.indexOf(b.data.rarity);
+  const bTypeIndex = typeOrder.indexOf(b.data.type);
+
+  if (typeIndex !== bTypeIndex) {
+    return typeIndex - bTypeIndex;
+  } else {
+    return rarityIndex - bRarityIndex;
+  }
+}
+---
+
+<Layout title="Reverse 1999 Gnomon">
+  <div class="text-sm breadcrumbs">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li>Artefacts</li>
+    </ul>
+  </div>
+
+  <h1>Artefact List</h1>
+
+  <div x-data={"dataset"}>
+    <div class="filters p-2">
+      <div class="grid grid-cols-filter">
+        <div class="py-2 px-4">Rarity</div>
+        <ul class="py-2 px-4 flex gap-1">
+          <template x-for="rarity in rarities">
+            <li>
+              <button
+                class="btn btn-outline btn-xs"
+                :class="rarity.code === rarityFilter ? 'btn-active' : ''"
+                @click="filterRarity(rarity)"
+                x-text="rarity.title"
+              >
+              </button>
+            </li>
+          </template>
+        </ul>
+
+        <div class="py-2 px-4">Type</div>
+        <ul class="py-2 px-4 flex gap-1">
+          <template x-for="type in types">
+            <li>
+              <button
+                class="btn btn-outline btn-xs"
+                :class="type.code === typeFilter ? 'btn-active' : ''"
+                @click="filterType(type)"
+                x-text="type.title"
+              >
+              </button>
+            </li>
+          </template>
+        </ul>
+
+        <div class="py-2 px-4">Tag</div>
+        <ul class="py-2 px-4 flex gap-1">
+          <template x-for="tag in tags">
+            <li>
+              <button
+                class="btn btn-outline btn-xs"
+                :class="tag.code === tagFilter ? 'btn-active' : ''"
+                @click="filterTag(tag)"
+                x-text="tag.title"
+              >
+              </button>
+            </li>
+          </template>
+        </ul>
+      </div>
+    </div>
+
+    <span>
+      Total <span>{artefactEntries.length}</span> items
+    </span>
+
+    <ul class="mt-8 flex flex-col gap-8">
+      {
+        artefactEntries
+          .sort((a, b) => sortArtefact(a, b))
+          .map(async (artefactEntry) => {
+            const { Content } = await artefactEntry.render();
+
+            return (
+              <li
+                class="flex gap-4"
+                x-show={`filterArtefact({
+                        rarity: '${artefactEntry.data.rarity}',
+                        type: '${artefactEntry.data.type}',
+                        tags: '${artefactEntry.data.tags}'
+                      })`}
+              >
+                <div>
+                  <h5 class="w-48">{artefactEntry.data.name}</h5>
+                  <img
+                    loading="lazy"
+                    class="w-20 h-20"
+                    src={`/data/rouge/artefacts/${artefactEntry.data.image}`}
+                    alt={`artefact ${artefactEntry.slug}`}
+                  />
+                </div>
+                <div>
+                  <div class="flex gap-1">
+                    <span
+                      class:list={[
+                        "badge font-medium border-transparent",
+                        {
+                          "text-common ":
+                            artefactEntry.data.rarity === "COMMON",
+                          "text-rare ": artefactEntry.data.rarity === "RARE",
+                          "text-epic ": artefactEntry.data.rarity === "EPIC",
+                        },
+                      ]}
+                    >
+                      {ARTEFACT_RARITY[artefactEntry.data.rarity].title}
+                    </span>
+                    <span class="badge font-medium border-transparent">
+                      {ARTEFACT_TYPE[artefactEntry.data.type].title}
+                    </span>
+                  </div>
+                  <div class="mt-1 flex gap-1">
+                    {artefactEntry.data.tags.map((tag) => (
+                      <span
+                        class:list={[
+                          "badge font-bold",
+                          {
+                            "border-support text-support": tag === "SUPPORT",
+                            "border-ritual text-ritual": tag === "RITUAL",
+                            "border-craft text-craft": tag === "CRAFT",
+                            "border-syntony text-syntony": tag === "SYNTONY",
+                            "border-resonance text-resonance":
+                              tag === "RESONANCE",
+                            "border-abundance text-abundance":
+                              tag === "ABUNDANCE",
+                            "border-extra-action text-extra-action":
+                              tag === "EXTRA_ACTION",
+                            "border-voltaic text-voltaic": tag === "VOLTAIC",
+                          },
+                        ]}
+                      >
+                        {ARTEFACT_TAG[tag].title}
+                      </span>
+                    ))}
+                  </div>
+                  <div class="mt-2">
+                    <Content
+                      components={{
+                        p: MarkdownContent,
+                        strong: MarkdownHighlight,
+                        effect: EffectTooltip,
+                      }}
+                    />
+                  </div>
+                </div>
+              </li>
+            );
+          })
+      }
+    </ul>
+  </div>
+</Layout>
+
+<script>
+  import { ARTEFACT_RARITY, ARTEFACT_TAG, ARTEFACT_TYPE } from "@data/artefact";
+  import Alpine from "alpinejs";
+
+  window.Alpine = Alpine;
+
+  Alpine.data("dataset", () => ({
+    rarityFilter: "ALL",
+    rarities: [
+      { title: "All", code: "ALL" },
+      ...Object.keys(ARTEFACT_RARITY).map((code) => ({
+        title: ARTEFACT_RARITY[code].title,
+        code,
+      })),
+    ],
+    typeFilter: "ALL",
+    types: [
+      { title: "All", code: "ALL" },
+      ...Object.keys(ARTEFACT_TYPE).map((code) => ({
+        title: ARTEFACT_TYPE[code].title,
+        code,
+      })),
+    ],
+    tagFilter: "ALL",
+    tags: [
+      { title: "All", code: "ALL" },
+      ...Object.keys(ARTEFACT_TAG).map((code) => ({
+        title: ARTEFACT_TAG[code].title,
+        code,
+      })),
+    ],
+
+    filterArtefact({ rarity, type, tags }) {
+      return (
+        (this.rarityFilter === "ALL" || this.rarityFilter === rarity) &&
+        (this.typeFilter === "ALL" || this.typeFilter === type) &&
+        (this.tagFilter === "ALL" || tags.includes(this.tagFilter))
+      );
+    },
+
+    filterRarity(rarity) {
+      this.rarityFilter = rarity.code;
+    },
+
+    filterType(type) {
+      this.typeFilter = type.code;
+    },
+
+    filterTag(tag) {
+      this.tagFilter = tag.code;
+    },
+  }));
+</script>

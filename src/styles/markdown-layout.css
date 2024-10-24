@@ -1,0 +1,61 @@
+::-webkit-scrollbar-thumb {
+  @apply rounded bg-transparent shadow-sm bg-primary;
+}
+
+::-webkit-scrollbar {
+  @apply w-2 h-2 bg-transparent;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+  overflow-x: auto;
+}
+
+table td,
+table th {
+  padding: 8px;
+  min-height: 1px;
+  height: 1px;
+}
+
+h1 {
+  @apply text-6xl font-bold text-primary;
+}
+
+h2 {
+  @apply text-primary text-3xl font-bold mt-10 mb-4 border-b-2 border-primary pb-2;
+}
+
+h3 {
+  @apply text-primary-content text-2xl font-bold my-4 text-center md:text-left;
+}
+
+h4 {
+  @apply text-primary-content text-xl font-bold my-4;
+}
+
+h5 {
+  @apply text-lg font-bold my-2;
+}
+
+h6 {
+  @apply font-bold my-2;
+}
+
+.container {
+  @apply max-w-5xl mx-auto px-4;
+}
+
+.paper-texture {
+  @apply min-w-60 p-2 relative text-black flex flex-col max-w-80 flex-1 bg-paper border-2 border-line-paper;
+}
+
+.highlight {
+  @apply text-primary font-bold;
+}
+
+strong {
+  @apply text-primary font-bold;
+}

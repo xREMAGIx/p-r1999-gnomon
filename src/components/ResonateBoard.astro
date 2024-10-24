@@ -1,0 +1,365 @@
+---
+
+---
+
+<div
+  class="resonate relative"
+  x-data="dataset"
+  @mousemove="onDrag"
+  @mousedown="onDragStart"
+  @mouseup="onDragEnd"
+>
+  <canvas
+    x-ref="canvas"
+    class="border w-full h-full absolute top-0 left-0 bg-white/10 -z-10"
+  ></canvas>
+
+  <template x-for="row in boardRow">
+    <div class="flex">
+      <template x-for="col in boardCol">
+        <div
+          data-col="col"
+          data-row="row"
+          class="w-10 h-10 border"
+          x-data="{ isDragOver: false }"
+          :class="isDragOver ? 'bg-primary' : ''"
+        >
+        </div>
+      </template>
+    </div>
+  </template>
+
+  <template x-for="block in blocks">
+    <div
+      data-col="block.col"
+      data-row="block.row"
+      x-data="{ x: block.pos.x, y: block.pos.y }"
+      class="w-10 h-10 border absolute"
+      :class="block.isCollided ? 'bg-primary/50' : ''"
+      :style="{ left: x + 'px', top: y + 'px' }"
+    >
+    </div>
+  </template>
+
+  <div class="mt-10"></div>
+  <div data-block-id="1" class="w-10 h-20 border"></div>
+  <div data-block-id="2" class="w-20 h-10 border"></div>
+  <div data-block-id="5" class="w-20 h-20 border"></div>
+  <div data-block-id="6" class="w-20 h-20 border"></div>
+</div>
+
+<script>
+  import SAT from "sat";
+  import Alpine from "alpinejs";
+  import matrix from "matrix-js";
+  import { diff, intersection, union } from "martinez-polygon-clipping";
+
+  window.Alpine = Alpine;
+  const BLOCK_SIZE = 40;
+
+  const BLOCKS = new Map([
+    [
+      "1",
+      {
+        shape: [[1], [1]],
+      },
+    ],
+    [
+      "2",
+      {
+        shape: [[1, 1]],
+      },
+    ],
+    [
+      "5",
+      {
+        shape: [
+          [0, 1, 0],
+          [1, 1, 1],
+        ],
+      },
+    ],
+    [
+      "6",
+      {
+        shape: [
+          [1, 0, 1, 0],
+          [1, 1, 1, 1],
+        ],
+      },
+    ],
+  ]);
+
+  const V = function (x, y) {
+    return new SAT.Vector(x, y);
+  };
+  const P = function (pos, points) {
+    return new SAT.Polygon(pos, points);
+  };
+
+  Alpine.data("dataset", () => ({
+    boardCol: 6,
+    boardRow: 6,
+    dragItem: null,
+    dragPoly: null,
+    canvas: null,
+    ctx: null,
+    initBlocks: [],
+    blocks: [],
+    boardX: 0,
+    boardY: 0,
+
+    lastMouseX: 0,
+    lastMouseY: 0,
+    isDragging: false,
+    polyPoints: [],
+
+    init() {
+      this.canvas = this.$refs.canvas;
+      this.ctx = this.$refs.canvas.getContext("2d");
+
+      let initBlocks: any[] = [];
+      for (let row = 0; row < this.boardRow; row++) {
+        for (let col = 0; col < this.boardCol; col++) {
+          initBlocks.push({
+            col: col,
+            row: row,
+            pos: {
+              x: this.boardX + col * BLOCK_SIZE,
+              y: this.boardY + row * BLOCK_SIZE,
+            },
+            size: BLOCK_SIZE,
+            isCollided: false,
+          });
+        }
+      }
+
+      this.initBlocks = JSON.parse(JSON.stringify(initBlocks));
+      this.blocks = JSON.parse(JSON.stringify(initBlocks));
+    },
+
+    drawPoly(poly, fill) {
+      if (!this.ctx) return;
+      this.ctx.fillStyle = fill;
+
+      this.ctx.beginPath();
+      this.ctx.moveTo(poly.pos.x, poly.pos.y);
+      poly.calcPoints.forEach((p) => {
+        this.ctx.lineTo(poly.pos.x + p.x, poly.pos.y + p.y);
+      });
+      this.ctx.closePath();
+      this.ctx.fill();
+    },
+
+    onDragStart(event) {
+      if (!event.target.attributes["data-block-id"]) return;
+      const blockId = event.target.attributes["data-block-id"].value;
+      const blockData = BLOCKS.get(blockId);
+
+      if (!blockData) return;
+
+      this.isDragging = true;
+      this.lastMouseX = event.clientX;
+      this.lastMouseY = event.clientY;
+
+      this.canvas.width = this.canvas.offsetWidth;
+      this.canvas.height = this.canvas.offsetHeight;
+      this.dragItem = event.target;
+
+      let rect = event.target.getBoundingClientRect();
+
+      const blockShapeMatrix = matrix(blockData.shape);
+      const blockShapeDimension = blockShapeMatrix.size();
+      const shapeRow = blockShapeDimension[0];
+      const shapeCol = blockShapeDimension[1];
+
+      let itemBlocks: any[] = [];
+
+      for (let row = 0; row < shapeRow; row++) {
+        for (let col = 0; col < shapeCol; col++) {
+          if (blockShapeMatrix(row, col)) {
+            const x = col * BLOCK_SIZE;
+            const y = row * BLOCK_SIZE;
+
+            itemBlocks.push([
+              [x, y],
+              [(col + 1) * BLOCK_SIZE, y],
+              [(col + 1) * BLOCK_SIZE, (row + 1) * BLOCK_SIZE],
+              [x, (row + 1) * BLOCK_SIZE],
+            ]);
+          }
+        }
+      }
+
+      let itemGeometry;
+      itemBlocks.forEach((element) => {
+        const eleBlock = {
+          type: "Feature",
+          geometry: {
+            type: "Polygon",
+            coordinates: [[...element, element[0]]],
+          },
+        } as any;
+
+        if (!itemGeometry) {
+          itemGeometry = eleBlock;
+        } else {
+          const newPolyBlockCoords = union(
+            itemGeometry.geometry.coordinates,
+            eleBlock.geometry.coordinates
+          );
+
+          itemGeometry = {
+            type: "Feature",
+            geometry: {
+              type: "MultiPolygon",
+              coordinates: newPolyBlockCoords,
+            },
+          };
+        }
+      });
+
+      const polyPoints = itemGeometry.geometry.coordinates
+        .flat(2)
+        .map((p) => V(p[0], p[1]));
+
+      this.polyPoints = polyPoints;
+
+      let dragPoly = P(V(rect.left, rect.top), [...polyPoints]);
+
+      this.dragPoly = dragPoly;
+    },
+
+    onDrag(event) {
+      if (!this.isDragging) return;
+
+      this.lastMouseX = event.clientX;
+      this.lastMouseY = event.clientY;
+
+      this.dragPoly.pos.x = event.clientX;
+      this.dragPoly.pos.y = event.clientY;
+
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.drawPoly(this.dragPoly, "rgba(255,0,0,1)");
+      this.blocks = JSON.parse(JSON.stringify(this.initBlocks));
+      this.sweepAndPrune(this.dragPoly, this.blocks);
+    },
+
+    onDragEnd(event) {
+      const delta = 6;
+
+      const diffX = Math.abs(event.clientX - this.lastMouseX);
+      const diffY = Math.abs(event.clientY - this.lastMouseY);
+
+      if (diffX < delta && diffY < delta) {
+        this.isDragging = false;
+        this.dragPoly.pos.x = event.clientX;
+        this.dragPoly.pos.y = event.clientY;
+        this.polyPoints = [];
+
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      }
+    },
+
+    distanceBetween(point1, point2) {
+      const dx = point2.x - point1.x;
+      const dy = point2.y - point1.y;
+      return Math.sqrt(dx * dx + dy * dy);
+    },
+
+    checkCollision(item, block) {
+      const BLOCK_OFFSET = 10;
+
+      let blockPoly = P(
+        V(block.pos.x + BLOCK_OFFSET, block.pos.y + BLOCK_OFFSET),
+        [
+          V(0, 0),
+          V(block.size - BLOCK_OFFSET * 2, 0),
+          V(block.size - BLOCK_OFFSET * 2, block.size - BLOCK_OFFSET * 2),
+          V(0, block.size - BLOCK_OFFSET * 2),
+        ]
+      );
+
+      this.drawPoly(blockPoly, "rgba(220,220,220,1)");
+
+      const itemCoord = item.calcPoints.map((p) => [
+        item.pos.x + p.x,
+        item.pos.y + p.y,
+      ]);
+
+      const blockCoord = blockPoly.calcPoints.map((p) => [
+        blockPoly.pos.x + p.x,
+        blockPoly.pos.y + p.y,
+      ]);
+
+      const itemGj = {
+        type: "Feature",
+        geometry: { type: "Polygon", coordinates: [[itemCoord]] },
+      } as any;
+      const blockGj = {
+        type: "Feature",
+        geometry: { type: "Polygon", coordinates: [[blockCoord]] },
+      } as any;
+
+      const polyPoints = intersection(
+        itemGj.geometry.coordinates,
+        blockGj.geometry.coordinates
+      );
+
+      if (!polyPoints || !polyPoints?.[0]?.[0]) return false;
+      // console.log("itemGj.geometry.coordinates", itemGj.geometry.coordinates);
+      // console.log("blockGj.geometry.coordinates", blockGj.geometry.coordinates);
+      // console.log("🚀 ~ checkCollision ~ polyPoints:", polyPoints[0][0]);
+
+      // const sortedPoints = this.sortPointsClockwise(
+      //   polyPoints[0][0].map((p) => ({ x: p[0], y: p[1] }))
+      // );
+
+      // const startPoint = sortedPoints[0];
+      // const diffPoints = this.sortPointsClockwise(
+      //   polyPoints[0][0].map((p) => ({ x: p[0], y: p[1] }))
+      // ).map((ele) => V(ele.x - startPoint.x, ele.y - startPoint.y));
+      // let diffPoly = P(startPoint, diffPoints);
+      // this.drawPoly(diffPoly, "rgba(0,0,255,1)");
+
+      // let response = new SAT.Response();
+      // let collided = SAT.testPolygonPolygon(item, blockPoly, response);
+
+      // if (collided) {
+      //   console.log("response.overlap", response.overlap);
+      // }
+
+      return true; // Collision detected
+    },
+
+    sweepAndPrune(item, blocks) {
+      const sweepRadius = BLOCK_SIZE * 3; // (slightly larger than the block size) is the maximum distance between the item's position and a block's position that is considered "close enough" to warrant a collision check
+      const pruneRadius = BLOCK_SIZE * 4; // (slightly larger than the sweepRadius) is the maximum distance between the item's position and a block's position that is considered "far enough" to warrant pruning the block from the search space
+      for (const block of blocks) {
+        const idx = blocks.indexOf(block);
+        const column = Math.floor(item.pos.x / BLOCK_SIZE);
+        const row = Math.floor(item.pos.y / BLOCK_SIZE);
+
+        let itemPoly = P(V(column * BLOCK_SIZE, row * BLOCK_SIZE), [
+          ...JSON.parse(JSON.stringify(this.polyPoints)),
+        ]);
+
+        const distance = this.distanceBetween(item.pos, block.pos);
+        if (distance > sweepRadius) continue; // Prune blocks that are too far away
+
+        this.drawPoly(itemPoly, "rgba(0,255,0,1)");
+
+        const collision = this.checkCollision(itemPoly, block);
+
+        if (collision) {
+          blocks[idx].isCollided = true;
+          // return true; // Collision detected, return true
+        }
+
+        if (distance > pruneRadius) continue; // Prune blocks that are too far away
+      }
+
+      // return false; // No collision detected
+    },
+  }));
+</script>

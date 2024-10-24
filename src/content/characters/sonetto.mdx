@@ -1,0 +1,238 @@
+---
+title: "Sonetto"
+id: "sonetto"
+code: "SONETTO"
+star: 5
+afflatus: "MINERAL"
+dmgType: "REALITY"
+version: "1.0"
+specialties: ["DPS", "SUPPORT", "CONTROL"]
+images: { portrait: "portrait.webp", signature: "signature.png" }
+isLimited: false
+---
+
+import CardInfo from "@components/CardInfo.astro";
+import CardStar from "@components/CardStar.astro";
+import CardType from "@components/CardType.astro";
+import CharacterStar from "@components/CharacterStar.astro";
+import { AFFLATUS_TYPE, DMG_TYPE, SPECIALTY } from "@data/character";
+
+# Sonetto
+
+<div class="my-8">
+  <CharacterStar star={frontmatter.star} />
+</div>
+
+<div class="flex justify-between flex-col-reverse md:flex-row gap-8">
+  <div>
+    <div class="flex gap-8 items-center">
+      <img
+        class="w-32" 
+        src={`/data/afflatus/af-${AFFLATUS_TYPE[frontmatter.afflatus].assetCode}.png`}
+        alt={`afflatus ${AFFLATUS_TYPE[frontmatter.afflatus].assetCode}`}
+      />
+      <div class="flex gap-2 items-center">
+        <img
+          class="w-14 h-14"
+          src={`/data/dmg-type/${DMG_TYPE[frontmatter.dmgType].assetCode}.png`}
+          alt={`damage type ${DMG_TYPE[frontmatter.dmgType].assetCode}`}
+        />
+        ##### {DMG_TYPE[frontmatter.dmgType].title}
+      </div>
+    </div>
+    {
+      frontmatter.specialties.map((specialty) => (
+        <div class="mx-1 my-2 badge badge-lg bg-base-content/10">{SPECIALTY[specialty].title}</div>
+    ))}
+    <div class="mt-4">
+      An arcanist's work. Exhibited in the 20th century for 16 years. Completed in Winter, on January 10. Exhibited at the St. Pavlov Foundation's External Inspection Unit.
+
+      ###### Medium
+      Curiosity
+
+      ###### Afflatus
+      Trained Loyal Dog [Mineral] Foreign Affairs
+
+      ###### Fragrance note
+      Woody - Vetiver, Arborvitae, Poivre Rose, Spice
+
+      ###### Dimensions
+      62 63/64 x29 13/16 x 8 17/64 in.
+
+    </div>
+    <div class="mt-4 flex gap-4 justify-center">
+      <img
+        class="w-64"
+        src={`/data/characters/${frontmatter.id}/signature.png`}
+        alt="signature"
+      />
+    </div>
+
+  </div>
+  <div class="flex flex-col items-center">
+    <div class="w-80">
+      <img
+        class="w-full"
+        src={`/data/characters/${frontmatter.id}/portrait.png`}
+        alt="portrait"
+      />
+    </div>
+    <div class="mt-5 flex gap-6 justify-center items-end">
+      <div class="text-center">
+        <img
+          class="w-40"
+          src={`/data/characters/${frontmatter.id}/udimo.png`}
+          alt="udimo"
+        />
+        Udimo
+      </div>
+      <div class="text-center">
+        <img
+          class="w-24"
+          src={`/data/characters/${frontmatter.id}/chibi.png`}
+          alt="chibi"
+        />
+        Chibi
+      </div>
+    </div>
+  </div>
+</div>
+
+## Arcane Skills
+
+### Commandment V
+
+<div class="flex gap-5 flex-col md:flex-row items-center md:items-stretch">
+  <div class="w-48 shrink-0">
+    <img
+      src={`/data/characters/${frontmatter.id}/skill-1.png`}
+      alt="Commandment V"
+    />
+  </div>
+  :::card-info{star='1' type="ATTACK" note="Sloth will lead to physical debilitation."}
+    1-target attack. Deals **200%** Reality DMG.
+  :::
+
+:::card-info{star='2' type="DEBUFF" note="Sloth will lead to physical debilitation. They keep reminding people of it."}
+1-target attack. Deals **200%** Reality DMG and inflicts :effect{code="DISARM"} status for 1 round.
+:::
+
+:::card-info{star='3' type="DEBUFF" note="Sloth will lead to physical debilitation. They keep reminding people of it, but it doesn't seem to work."}
+1-target attack. Deals **300%** Reality DMG and inflicts :effect{code="DISARM"} status for 2 rounds.
+:::
+
+</div>
+
+### Exhortations IX
+
+<div class="flex gap-5 flex-col md:flex-row items-center md:items-stretch">
+  <div class="w-48 shrink-0">
+    <img
+      src={`/data/characters/${frontmatter.id}/skill-2.png`}
+      alt="Exhortations IX"
+    />
+  </div>
+  :::card-info{star='1' type="BUFF" note="A merciful heart will foster loyalty."}
+    Mass buff. DMG Dealt **+15%** and DMG Taken **-15%** for all allies and Penetration Rate **+10%** for the caster. Lasts 2 rounds.
+  :::
+
+:::card-info{star='2' type="BUFF" note="A merciful heart will foster loyalty. It works all the time."}
+Mass buff. DMG Dealt **+20%** and DMG Taken **-20%** for all allies and Penetration Rate **+10%** for the caster. Lasts 2 rounds.
+:::
+
+:::card-info{star='3' type="BUFF" note="A merciful heart will foster loyalty. Of course, you won't have to do it all the time."}
+Mass buff. DMG Dealt **+25%** and DMG Taken **-25%** for all allies and Penetration Rate **+10%** for the caster. Lasts 3 rounds.
+:::
+
+</div>
+
+### Unrestricted Chant
+
+<div class="flex gap-5 flex-col md:flex-row items-center md:items-stretch">
+  <div class="w-48 shrink-0">
+    <img
+      src={`/data/characters/${frontmatter.id}/ultimate.png`}
+      alt="Unrestricted Chant"
+    />
+  </div>
+  :::card-info{star='1' type="ATTACK" note="It is the omega, the final answer, the result of all calculations."}
+    Mass attack. Deals **300%** Reality DMG to all enemies. If the caster is in _[Stats Up]_ or _[Pos Status]_ statuses, this attack enjoys Penetration Rate **+8%** and deals **100%** more Reality DMG.
+  :::
+</div>
+
+## Inheritance
+
+### Search the Poems
+
+<div class="mt-4 flex items-center">
+  :img{.w-8.mr-2 src="/data/insight/insight-1.png" alt="insight-1 icon"}
+  ##### Insight 1
+</div>
+
+When the caster is in _[Stats Up]_ or _[Pos Status]_ statuses, DMG Dealt **+15%**.
+
+<div class="mt-4 flex items-center">
+  :img{.w-8.mr-2 src="/data/insight/insight-2.png" alt="insight-2 icon"}
+  ##### Insight 2
+</div>
+
+Reality DEF and Mental DEF **+10%** when the caster enters battle.
+
+<div class="mt-4 flex items-center">
+  :img{.w-8.mr-2 src="/data/insight/insight-3.png" alt="insight-3 icon"}
+  ##### Insight 3
+</div>
+
+When the caster is in _[Stats Up]_ or _[Pos Status]_ statuses, Critical Resist and Critical DEF **+15%**.
+
+## Portray
+
+:span[Lv. 1:]{.text-2xl.mr-2}
+_Unrestricted Chant_'s effect changes to: if the caster is in _[Stats Up]_ or _[Pos Status]_, Penetration Rate **+16%**.
+
+:span[Lv. 2:]{.text-2xl.mr-2}
+_Commandment V_'s effect changes to: at **1/2/3** stars, deals **220/230/350%** Reality DMG.
+
+:span[Lv. 3:]{.text-2xl.mr-2}
+_Exhortation IX_'s effect changes to: Penetration Rate **+15%**.
+
+:span[Lv. 4:]{.text-2xl.mr-2}
+_Unrestricted Chant_'s effect changes to: if the caster is in _[Stats Up]_ or _[Pos Status]_, Penetration Rate **+24%**.
+
+:span[Lv. 5:]{.text-2xl.mr-2}
+_Unrestricted Chant_'s effect changes to: if the caster is in _[Stats Up]_ or _[Pos Status]_, Penetration Rate **+32%**.
+
+## Insight Materials
+
+<div class="flex flex-col md:flex-row gap-4">
+  <div class="flex-1">
+    <div class="flex items-center">
+      :img{.w-6.mr-2 src="/data/insight/insight-1.png" alt="insight-1 icon"}
+      ##### Insight 1
+    </div>
+    :material{code="SHARPODONTY" variant="small" require="12000"}
+    :material{code="PAGE_OF_MINERAL_WEALTH" variant="small" require="6"}
+    :material{code="ESOTERIC_BONES" variant="small" require="3"}
+    :material{code="MAGNESIA_CRYSTAL" variant="small" require="4"}
+  </div>
+  <div class="flex-1">
+    <div class="flex items-center">
+      :img{.w-6.mr-2 src="/data/insight/insight-2.png" alt="insight-2 icon"}
+      ##### Insight 2
+    </div>
+    :material{code="SHARPODONTY" variant="small" require="30000"}
+    :material{code="SCROLL_OF_MINERAL_WEALTH" variant="small" require="8"}
+    :material{code="ROUGH_SILVER_INGOT" variant="small" require="4"}
+    :material{code="PROPHETIC_BIRD" variant="small" require="3"}
+  </div>
+  <div class="flex-1">
+    <div class="flex items-center">
+      :img{.w-6.mr-2 src="/data/insight/insight-3.png" alt="insight-3 icon"}
+      ##### Insight 3
+    </div>
+    :material{code="SHARPODONTY" variant="small" require="120000"}
+    :material{code="TOME_OF_MINERAL_WEALTH" variant="small" require="12"}
+    :material{code="PLATINUM_OUIJA" variant="small" require="4"}
+    :material{code="MISTILTEINN" variant="small" require="2"}
+  </div>
+</div>

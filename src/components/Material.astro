@@ -1,0 +1,61 @@
+---
+import { getCollection } from "astro:content";
+
+interface Props {
+  code: string;
+  variant: "small" | "medium" | "large";
+  require?: number;
+}
+
+const { code, variant = "medium", require } = Astro.props;
+
+const materialEntries = await getCollection("materials");
+
+const materials = materialEntries.reduce((prev, curr) => {
+  return {
+    ...prev,
+    [curr.data.code]: curr,
+  };
+}, {});
+
+const material = materials[code];
+---
+
+<div class="flex justify-between items-center">
+  <di class="flex items-center">
+    <div
+      class:list={[
+        "relative shrink-0",
+        { "w-14 h-14": variant === "small" },
+        { "w-20 h-20": variant === "medium" },
+        { "w-32 h-32": variant === "large" },
+      ]}
+    >
+      <div>
+        <img
+          class="w-full h-full"
+          src={`/data/materials/bg-rare-${material.data.rarity}.png`}
+          alt={`material ${material.data.rare}`}
+        />
+      </div>
+      <div
+        class:list={[
+          "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
+          { "w-12": variant === "small" },
+          { "w-16": variant === "medium" },
+          { "w-24": variant === "large" },
+        ]}
+      >
+        <img
+          src={`/data/materials/${material.data.image}`}
+          alt={`material ${material.data.title}`}
+        />
+      </div>
+    </div>
+    <a class="text-sm font-medium" href={`/materials/${material.slug}`}>
+      {material.data.title}
+    </a>
+  </di>
+
+  {require && <span class="text-sm ml-2">x {require}</span>}
+</div>

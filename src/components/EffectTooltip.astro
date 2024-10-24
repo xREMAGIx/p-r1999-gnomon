@@ -1,0 +1,49 @@
+---
+import { getCollection } from "astro:content";
+import MarkdownHighlight from "./MarkdownHighlight.astro";
+import MarkdownContent from "./MarkdownContent.astro";
+interface Props {
+  code: string;
+}
+
+const { code, ...props } = Astro.props;
+
+const effectEntries = await getCollection("effects");
+
+const effects = effectEntries.reduce((prev, curr) => {
+  return {
+    ...prev,
+    [curr.data.code]: curr,
+  };
+}, {});
+
+const effect = effects[code];
+
+const { Content } = await effect.render();
+---
+
+<span
+  {...props}
+  x-data="{isShow: false, isToggle: false}"
+  class="inline-block relative"
+>
+  <span
+    @click="isToggle = !isToggle"
+    @mouseenter="isShow = true"
+    @mouseleave="isShow = false"
+    class="text-effect cursor-pointer">[{effect.data.title}]</span
+  >
+  <div
+    @mousedown.outside="isToggle = false"
+    class="absolute block bottom-full left-1/2 -translate-x-1/2 bg-base-100 w-40 text-base-content border-line-paper border p-2 transition-all duration-300 invisible opacity-0"
+    :class="isShow || isToggle ? '!visible !opacity-100' : ''"
+  >
+    <Content
+      components={{
+        p: MarkdownContent,
+        strong: MarkdownHighlight,
+        effect: Astro.self,
+      }}
+    />
+  </div>
+</span>
